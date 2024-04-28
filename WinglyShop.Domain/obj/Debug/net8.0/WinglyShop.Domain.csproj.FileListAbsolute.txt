@@ -1,0 +1,11 @@
+C:\Users\Gustavo\Desktop\Gustavo\All\Programming\dotNET\Projetos2.0\WinglyShop\WinglyShop.Domain\obj\Debug\net8.0\WinglyShop.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Gustavo\Desktop\Gustavo\All\Programming\dotNET\Projetos2.0\WinglyShop\WinglyShop.Domain\obj\Debug\net8.0\WinglyShop.Domain.AssemblyInfoInputs.cache
+C:\Users\Gustavo\Desktop\Gustavo\All\Programming\dotNET\Projetos2.0\WinglyShop\WinglyShop.Domain\obj\Debug\net8.0\WinglyShop.Domain.AssemblyInfo.cs
+C:\Users\Gustavo\Desktop\Gustavo\All\Programming\dotNET\Projetos2.0\WinglyShop\WinglyShop.Domain\obj\Debug\net8.0\WinglyShop.Domain.csproj.CoreCompileInputs.cache
+C:\Users\Gustavo\Desktop\Gustavo\All\Programming\dotNET\Projetos2.0\WinglyShop\WinglyShop.Domain\bin\Debug\net8.0\WinglyShop.Domain.deps.json
+C:\Users\Gustavo\Desktop\Gustavo\All\Programming\dotNET\Projetos2.0\WinglyShop\WinglyShop.Domain\bin\Debug\net8.0\WinglyShop.Domain.dll
+C:\Users\Gustavo\Desktop\Gustavo\All\Programming\dotNET\Projetos2.0\WinglyShop\WinglyShop.Domain\bin\Debug\net8.0\WinglyShop.Domain.pdb
+C:\Users\Gustavo\Desktop\Gustavo\All\Programming\dotNET\Projetos2.0\WinglyShop\WinglyShop.Domain\obj\Debug\net8.0\WinglyShop.Domain.dll
+C:\Users\Gustavo\Desktop\Gustavo\All\Programming\dotNET\Projetos2.0\WinglyShop\WinglyShop.Domain\obj\Debug\net8.0\refint\WinglyShop.Domain.dll
+C:\Users\Gustavo\Desktop\Gustavo\All\Programming\dotNET\Projetos2.0\WinglyShop\WinglyShop.Domain\obj\Debug\net8.0\WinglyShop.Domain.pdb
+C:\Users\Gustavo\Desktop\Gustavo\All\Programming\dotNET\Projetos2.0\WinglyShop\WinglyShop.Domain\obj\Debug\net8.0\ref\WinglyShop.Domain.dll
