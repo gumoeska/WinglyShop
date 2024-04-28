@@ -13,3 +13,4 @@
 /WinglyShop.Application/obj/Debug/net8.0/WinglyShop.Application.AssemblyInfoInputs.cache
 /WinglyShop.Domain/obj/Debug/net8.0/WinglyShop.Domain.AssemblyInfo.cs
 /WinglyShop.Domain/obj/Debug/net8.0/WinglyShop.Domain.AssemblyInfoInputs.cache
+*.suo
