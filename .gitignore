@@ -1,0 +1,15 @@
+﻿################################################################################
+# Este arquivo .gitignore foi criado automaticamente pelo Microsoft(R) Visual Studio.
+################################################################################
+
+/WinglyShop.Shared/obj/Debug/net8.0/WinglyShop.Shared.AssemblyInfo.cs
+/WinglyShop.Shared/obj/Debug/net8.0/WinglyShop.Shared.AssemblyInfoInputs.cache
+/WinglyShop.Infrastructure/obj/Debug/net8.0/WinglyShop.Infrastructure.AssemblyInfo.cs
+/WinglyShop.Infrastructure/obj/Debug/net8.0/WinglyShop.Infrastructure.AssemblyInfoInputs.cache
+*.vsidx
+/WinglyShop.API/obj/Debug/net8.0/WinglyShop.API.AssemblyInfo.cs
+/WinglyShop.API/obj/Debug/net8.0/WinglyShop.API.AssemblyInfoInputs.cache
+/WinglyShop.Application/obj/Debug/net8.0/WinglyShop.Application.AssemblyInfo.cs
+/WinglyShop.Application/obj/Debug/net8.0/WinglyShop.Application.AssemblyInfoInputs.cache
+/WinglyShop.Domain/obj/Debug/net8.0/WinglyShop.Domain.AssemblyInfo.cs
+/WinglyShop.Domain/obj/Debug/net8.0/WinglyShop.Domain.AssemblyInfoInputs.cache
