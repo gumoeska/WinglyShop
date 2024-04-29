@@ -10,7 +10,7 @@ namespace WinglyShop.API.Controllers;
 [Route("api/[controller]")]
 public class AuthController : ApiController
 {
-	public AuthController(IDbConnection dbConnection)
+	protected AuthController(IDbConnection dbConnection)
 		: base(dbConnection)
 	{
 	}
