@@ -25,8 +25,6 @@ public class CartController : ApiController
 			request.productId, 
 			request.quantity);
 
-
-
 		//Result<string> tokenResult = await _dispatcher.Send<LoginCommand, string>(command, cancellationToken);
 
 		//if (tokenResult.IsFailure)

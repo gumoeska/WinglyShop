@@ -1,6 +1,4 @@
-﻿using System.Xml.Linq;
-using WinglyShop.Domain.Common;
-using WinglyShop.Domain.Entities.Account;
+﻿using WinglyShop.Domain.Common;
 
 namespace WinglyShop.Domain.Entities.User;
 

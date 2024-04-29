@@ -7,19 +7,22 @@ CREATE TABLE Roles(
     isActive BIT
 )
 
-CREATE TABLE Account(
+CREATE TABLE User(
     id INT PRIMARY KEY IDENTITY,
     login VARCHAR(255),
     email VARCHAR(255),
     password VARCHAR(255),
+    name VARCHAR(255),
+    surname VARCHAR(255),
+    image VARCHAR(1000),
     phone VARCHAR(255),
     isActive BIT,
 
     -- Foreign Keys
     idRole INT,
 
-    CONSTRAINT FK_Users_Roles FOREIGN KEY (idRole) 
-        REFERENCES Roles(id)
+    CONSTRAINT FK_Users_Roles FOREIGN KEY (idRole)
+        REFERENCES Roles (id)
 )
 
 CREATE TABLE Address(
@@ -36,20 +39,6 @@ CREATE TABLE Address(
     CONSTRAINT FK_Addresses_Users FOREIGN KEY (idUser)
         REFERENCES User (id)
         ON DELETE CASCADE
-)
-
-CREATE TABLE User(
-    id INT PRIMARY KEY IDENTITY,
-    name VARCHAR(255),
-    surname VARCHAR(255),
-    image VARCHAR(1000),
-    isActive BIT,
-
-    -- Foreign Keys
-    idAccount INT,
-
-    CONSTRAINT FK_Users_Accounts FOREIGN KEY (idAccount) 
-        REFERENCES Account (id)
 )
 
 CREATE TABLE Category(
