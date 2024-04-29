@@ -9,14 +9,14 @@ using WinglyShop.Shared;
 namespace WinglyShop.API.Controllers;
 
 [Route("api/[controller]")]
-public class UserController : ApiController
+public class AccountController : ApiController
 {
-	protected UserController(IDbConnection dbConnection) 
+	public AccountController(IDbConnection dbConnection) 
 		: base(dbConnection)
 	{
 	}
 
-	[HttpPost("CreateUser")]
+	[HttpPost("Create")]
 	public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request, CancellationToken cancellationToken)
 	{
 		// Validation
@@ -41,7 +41,7 @@ public class UserController : ApiController
 		return Ok(tokenResult);
 	}
 
-	[HttpPut("UpdateUser")]
+	[HttpPut("Update")]
 	public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequest request, CancellationToken cancellationToken)
 	{
 		// Validation
@@ -55,6 +55,8 @@ public class UserController : ApiController
 			request.image);
 
 		var command = new UpdateUserCommand(user);
+
+		// Test
 
 		//Result<string> tokenResult = await _dispatcher.Send<LoginCommand, string>(command, cancellationToken);
 
