@@ -7,10 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Cart\" />
     <Folder Include="Order\GetOrder\" />
     <Folder Include="Order\DeleteOrder\" />
-    <Folder Include="Wishlist\" />
   </ItemGroup>
 
   <ItemGroup>
