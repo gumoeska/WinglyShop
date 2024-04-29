@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WinglyShop.Application\WinglyShop.Application.csproj" />
+    <ProjectReference Include="..\WinglyShop.Domain\WinglyShop.Domain.csproj" />
     <ProjectReference Include="..\WinglyShop.Infrastructure\WinglyShop.Infrastructure.csproj" />
   </ItemGroup>
 
