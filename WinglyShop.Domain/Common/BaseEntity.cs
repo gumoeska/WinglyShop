@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WinglyShop.Domain.Common.Interfaces;
+﻿using WinglyShop.Domain.Common.Interfaces;
 
 namespace WinglyShop.Domain.Common;
 
