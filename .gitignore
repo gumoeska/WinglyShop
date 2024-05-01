@@ -119,3 +119,6 @@
 /.vs/ProjectEvaluation/winglyshop.metadata.v7.bin
 /.vs/ProjectEvaluation/winglyshop.projects.v7.bin
 /.vs/WinglyShop/v17/.futdcache.v2
+/WinglyShop.Infrastructure/bin/Debug/net8.0/WinglyShop.Infrastructure.deps.json
+/WinglyShop.Application/bin/Debug/net8.0/WinglyShop.Application.deps.json
+/WinglyShop.API/bin/Debug/net8.0/WinglyShop.API.runtimeconfig.json
