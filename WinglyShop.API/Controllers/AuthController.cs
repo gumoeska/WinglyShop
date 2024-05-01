@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WinglyShop.API.Abstractions;
 using WinglyShop.Application.Abstractions.Data;
+using WinglyShop.Application.Abstractions.Dispatcher;
 using WinglyShop.Application.Authentication.Login;
 using WinglyShop.Application.Authentication.Register;
 using WinglyShop.Shared;
@@ -10,8 +11,8 @@ namespace WinglyShop.API.Controllers;
 [Route("api/[controller]")]
 public class AuthController : ApiController
 {
-	public AuthController(IDbConnection dbConnection)
-		: base(dbConnection)
+	public AuthController(IDbConnection dbConnection, IDispatcher dispatcher)
+		: base(dbConnection, dispatcher)
 	{
 	}
 

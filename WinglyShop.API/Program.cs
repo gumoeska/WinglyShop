@@ -1,7 +1,9 @@
-
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using WinglyShop.API.Configurations;
+using WinglyShop.Application;
 using WinglyShop.Application.Abstractions.Data;
+using WinglyShop.Application.Abstractions.Dispatcher;
 using WinglyShop.Infrastructure;
 
 namespace WinglyShop.API
@@ -35,7 +37,9 @@ namespace WinglyShop.API
 			builder.Services
 				.AddSwaggerGen(x => x.SwaggerDoc("v1", new OpenApiInfo { Title = "WinglyShop.API", Version = "v1" }));
 
-			builder.Services.AddScoped<IDbConnection, DbConnection>();
+			builder.Services.AddScoped<IDbConnection, DbConnection>(); // Database
+			builder.Services.AddScoped<IDispatcher, Dispatcher>(); // Dispatcher
+			builder.Services.AddHandlersFromAssembly(typeof(AssemblyReference).Assembly); // Scan the Handlers
 
 			var app = builder.Build();
 
@@ -50,7 +54,6 @@ namespace WinglyShop.API
 			app.UseHttpsRedirection();
 
 			app.UseAuthorization();
-
 
 			app.MapControllers();
 

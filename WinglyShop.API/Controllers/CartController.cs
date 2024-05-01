@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WinglyShop.API.Abstractions;
 using WinglyShop.Application.Abstractions.Data;
+using WinglyShop.Application.Abstractions.Dispatcher;
 using WinglyShop.Application.Cart;
 using WinglyShop.Shared;
 
@@ -9,8 +10,8 @@ namespace WinglyShop.API.Controllers;
 [Route("api/[controller]")]
 public class CartController : ApiController
 {
-    public CartController(IDbConnection dbConnection)
-		: base(dbConnection)
+    public CartController(IDbConnection dbConnection, IDispatcher dispatcher)
+		: base(dbConnection, dispatcher)
 	{
     }
 

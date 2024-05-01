@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WinglyShop.API.Abstractions;
 using WinglyShop.Application.Abstractions.Data;
+using WinglyShop.Application.Abstractions.Dispatcher;
 using WinglyShop.Application.Cart;
-using WinglyShop.Application.Order.DeleteOrder;
-using WinglyShop.Application.Order.GetOrder;
-using WinglyShop.Application.User.Delete;
-using WinglyShop.Application.User.Get;
-using WinglyShop.Application.User.Update;
+using WinglyShop.Application.Users.Delete;
+using WinglyShop.Application.Users.Get;
+using WinglyShop.Application.Users.Update;
 using WinglyShop.Application.Wishlist;
 using WinglyShop.Domain.Entities.User;
 using WinglyShop.Shared;
@@ -16,8 +15,8 @@ namespace WinglyShop.API.Controllers;
 [Route("api/[controller]")]
 public class UserController : ApiController
 {
-    public UserController(IDbConnection dbConnection)
-		: base(dbConnection)
+    public UserController(IDbConnection dbConnection, IDispatcher dispatcher)
+		: base(dbConnection, dispatcher)
 	{
     }
 
@@ -28,7 +27,9 @@ public class UserController : ApiController
 		if (request is null)
 			return null;
 
-		//var command = new UpdateUserCommand(request.user);
+		var command = new GetUserByIdQuery(request.userId);
+
+		var result = _dispatcher.Query<GetUserByIdQuery, User>(command, cancellationToken);
 
 		// Test
 

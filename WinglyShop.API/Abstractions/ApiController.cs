@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WinglyShop.Application.Abstractions.Data;
+using WinglyShop.Application.Abstractions.Dispatcher;
 
 namespace WinglyShop.API.Abstractions;
 
@@ -7,9 +8,11 @@ namespace WinglyShop.API.Abstractions;
 public class ApiController : ControllerBase
 {
 	protected readonly IDbConnection _dbConnection;
+	protected readonly IDispatcher _dispatcher;
 
-	protected ApiController(IDbConnection dbConnection)
+	protected ApiController(IDbConnection dbConnection, IDispatcher dispatcher)
 	{
 		_dbConnection = dbConnection;
+		_dispatcher = dispatcher;
 	}
 }
