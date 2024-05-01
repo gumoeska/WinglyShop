@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WinglyShop.API.Abstractions;
+using WinglyShop.API.Abstractions.Auth;
+using WinglyShop.API.Services.Auth;
 using WinglyShop.Application.Abstractions.Data;
 using WinglyShop.Application.Abstractions.Dispatcher;
+using WinglyShop.Application.Authentication.DTOs;
 using WinglyShop.Application.Authentication.Login;
 using WinglyShop.Application.Authentication.Register;
+using WinglyShop.Domain.Entities.User;
 using WinglyShop.Shared;
 
 namespace WinglyShop.API.Controllers;
@@ -11,28 +15,38 @@ namespace WinglyShop.API.Controllers;
 [Route("api/[controller]")]
 public class AuthController : ApiController
 {
-	public AuthController(IDbConnection dbConnection, IDispatcher dispatcher)
+	private readonly ITokenService _tokenService;
+
+	public AuthController(IDbConnection dbConnection, IDispatcher dispatcher, ITokenService tokenService)
 		: base(dbConnection, dispatcher)
 	{
+		_tokenService = tokenService;
 	}
 
 	[HttpPost("Login")]
 	public async Task<IActionResult> LoginAccount([FromBody] LoginRequest request, CancellationToken cancellationToken)
 	{
-		// Test
-		//if (request is null)
-		//	return null;
+		// Creating the command
+		var command = new LoginCommand(request.login, request.password);
 
-		//var command = new LoginCommand(request.email, request.password);
+		// Sending the request to the handler
+		var userRequest = await _dispatcher.Send<LoginCommand, LoginUserResultDTO>(command, cancellationToken);
 
-		//Result<string> tokenResult = await _dispatcher.Send<LoginCommand, string>(command, cancellationToken);
+		// Validate the request
+		if (userRequest is { IsFailure: true })
+			return BadRequest(userRequest.Error);
 
-		//if (tokenResult.IsFailure)
-		//	return null;
+		// Get the User
+		var userResponse = userRequest.Value;
 
-		Result<string> tokenResult = "Test";
+		// Validate the userResponse
+		if (userResponse is null)
+			return BadRequest("User not found.");
 
-		return Ok(tokenResult);
+		// Generating the token
+		var token = _tokenService.GenerateToken(userResponse);
+
+		return Ok(Result.Success<string>(token));
 	}
 
 	[HttpPost("Register")]

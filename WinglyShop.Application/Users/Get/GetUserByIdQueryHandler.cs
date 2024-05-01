@@ -12,11 +12,8 @@ internal sealed class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, 
     public GetUserByIdQueryHandler(IDbConnection dbConnection) 
 		=> (_dbConnection) = (dbConnection);
 
-    public async Task<Result<User>> Handle(GetUserByIdQuery query, CancellationToken cancellationToken)
+	public Task<Result<User>> Handle(GetUserByIdQuery query, CancellationToken cancellationToken)
 	{
-		var user = new User(5, "Gustavo", "Moeska", "img");
-
-		//return Result.Failure<User>(Error.NullValue);
-		return Result.Success<User>(user);
+		throw new NotImplementedException();
 	}
 }

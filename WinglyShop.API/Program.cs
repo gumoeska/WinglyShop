@@ -1,6 +1,11 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
+using WinglyShop.API.Abstractions.Auth;
 using WinglyShop.API.Configurations;
+using WinglyShop.API.Services.Auth;
 using WinglyShop.Application;
 using WinglyShop.Application.Abstractions.Data;
 using WinglyShop.Application.Abstractions.Dispatcher;
@@ -19,6 +24,8 @@ namespace WinglyShop.API
 				.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
 				.Build();
 
+			//builder.Services.Configure<SecretKey>(configuration.GetSection("SecretKey")); // Configuring the secret key
+
 			builder.Services.AddControllers();
 			builder.Services.AddEndpointsApiExplorer();
 
@@ -28,7 +35,7 @@ namespace WinglyShop.API
 			{
 				policy.AddPolicy("AllowSpecificOrigin", builder =>
 				 builder.WithOrigins("http://localhost:7283/")
-				  .SetIsOriginAllowed((host) => true) // Para endereço localhost
+				  .SetIsOriginAllowed((host) => true) // localhost
 				  .AllowAnyMethod()
 				  .AllowAnyHeader()
 				  .AllowCredentials());
@@ -39,7 +46,29 @@ namespace WinglyShop.API
 
 			builder.Services.AddScoped<IDbConnection, DbConnection>(); // Database
 			builder.Services.AddScoped<IDispatcher, Dispatcher>(); // Dispatcher
+			builder.Services.AddScoped<ITokenService, TokenService>(); // Token Service
 			builder.Services.AddHandlersFromAssembly(typeof(AssemblyReference).Assembly); // Scan the Handlers
+
+			// Authentication
+			var secretKey = Encoding.ASCII.GetBytes(SecretKey.Key);
+
+			builder.Services.AddAuthentication(x =>
+			{
+				x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+				x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+			})
+			.AddJwtBearer(x =>
+			{
+				x.RequireHttpsMetadata = false;
+				x.SaveToken = true;
+				x.TokenValidationParameters = new TokenValidationParameters
+				{
+					ValidateIssuerSigningKey = true,
+					IssuerSigningKey = new SymmetricSecurityKey(secretKey),
+					ValidateIssuer = false,
+					ValidateAudience = false
+				};
+			});
 
 			var app = builder.Build();
 

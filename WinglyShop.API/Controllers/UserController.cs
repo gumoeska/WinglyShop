@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WinglyShop.API.Abstractions;
 using WinglyShop.Application.Abstractions.Data;
 using WinglyShop.Application.Abstractions.Dispatcher;
@@ -12,6 +13,7 @@ using WinglyShop.Shared;
 
 namespace WinglyShop.API.Controllers;
 
+[Authorize]
 [Route("api/[controller]")]
 public class UserController : ApiController
 {
@@ -20,7 +22,7 @@ public class UserController : ApiController
 	{
     }
 
-	[HttpGet("GetUser")]
+	[HttpGet("GetUser"), Authorize(Roles = "Admin")]
 	public async Task<IActionResult> GetUserById([FromBody] GetUserByIdRequest request, CancellationToken cancellationToken)
 	{
 		// Validation
@@ -32,7 +34,6 @@ public class UserController : ApiController
 		var result = _dispatcher.Query<GetUserByIdQuery, User>(command, cancellationToken);
 
 		// Test
-
 		//Result<string> tokenResult = await _dispatcher.Send<LoginCommand, string>(command, cancellationToken);
 
 		//if (tokenResult.IsFailure)
