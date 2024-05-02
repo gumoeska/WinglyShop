@@ -1,3 +1,5 @@
-﻿namespace WinglyShop.Application.Authentication.Register;
+﻿using WinglyShop.Domain.Entities.User;
 
-public record RegisterRequest(Domain.Entities.User.User user);
+namespace WinglyShop.Application.Authentication.Register;
+
+public record RegisterRequest(User user);

@@ -1,0 +1,67 @@
+﻿using Dapper;
+using WinglyShop.Application.Abstractions.Data;
+using WinglyShop.Application.Abstractions.Messaging;
+using WinglyShop.Shared;
+
+namespace WinglyShop.Application.Authentication.Register;
+
+internal sealed class RegisterCommandHandler : ICommandHandler<RegisterCommand, bool>
+{
+    private readonly IDbConnection _dbConnection;
+
+    public RegisterCommandHandler(IDbConnection dbConnection)
+    {
+        _dbConnection = dbConnection;
+    }
+
+    public async Task<Result<bool>> Handle(RegisterCommand command, CancellationToken cancellationToken)
+	{
+		// Validate
+		if (command is null)
+			throw new ArgumentNullException(nameof(command));
+
+		// Database Connection
+		await using var dbConnection = _dbConnection.CreateConnection();
+		await dbConnection.OpenAsync(cancellationToken);
+
+		//// Queries
+		//var registerQuery = RegisterDbQueries.RegisterQuery();
+
+		//// Try to return the user
+		//var user = await dbConnection.QueryFirstOrDefaultAsync<User>(
+		//	logInQuery,
+		//	new
+		//	{
+		//		Login = command.logIn,
+		//		Password = command.password
+		//	});
+
+		//// Validate the user
+		//if (user is null)
+		//{
+		//	return Result.Failure<LoginUserResultDTO>(Error.NullValue);
+		//}
+
+		//// if the user is not null, return the role
+		//var role = await dbConnection.QueryFirstOrDefaultAsync<Role>(
+		//	userRoleQuery,
+		//	new
+		//	{
+		//		RoleId = user.IdRole
+		//	});
+
+		//if (role is null)
+		//{
+		//	return Result.Failure<LoginUserResultDTO>(Error.NullValue);
+		//}
+
+		//// Building the object
+		//var userData = new LoginUserResultDTO(user, role);
+
+		//return Result.Success<LoginUserResultDTO>(userData);
+
+		//return await Result.Success<bool>(true);
+
+		return false;
+	}
+}
