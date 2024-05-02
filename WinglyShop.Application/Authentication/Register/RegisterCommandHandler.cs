@@ -1,7 +1,9 @@
 ﻿using Dapper;
+using System.Transactions;
 using WinglyShop.Application.Abstractions.Data;
 using WinglyShop.Application.Abstractions.Messaging;
 using WinglyShop.Shared;
+using WinglyShop.Shared.Extensions;
 
 namespace WinglyShop.Application.Authentication.Register;
 
@@ -22,46 +24,37 @@ internal sealed class RegisterCommandHandler : ICommandHandler<RegisterCommand, 
 
 		// Database Connection
 		await using var dbConnection = _dbConnection.CreateConnection();
-		await dbConnection.OpenAsync(cancellationToken);
 
-		//// Queries
-		//var registerQuery = RegisterDbQueries.RegisterQuery();
+		// Queries
+		var registerQuery = RegisterDbQueries.RegisterQuery();
 
-		//// Try to return the user
-		//var user = await dbConnection.QueryFirstOrDefaultAsync<User>(
-		//	logInQuery,
-		//	new
-		//	{
-		//		Login = command.logIn,
-		//		Password = command.password
-		//	});
+		// Transaction
+		using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+		{
+			try
+			{
+				// Open Connection
+				await dbConnection.OpenAsync(cancellationToken);
 
-		//// Validate the user
-		//if (user is null)
-		//{
-		//	return Result.Failure<LoginUserResultDTO>(Error.NullValue);
-		//}
+				// Insert command returning the affectedRow
+				var affectedRow = await dbConnection
+					.ExecuteAsync(registerQuery, command.user);
 
-		//// if the user is not null, return the role
-		//var role = await dbConnection.QueryFirstOrDefaultAsync<Role>(
-		//	userRoleQuery,
-		//	new
-		//	{
-		//		RoleId = user.IdRole
-		//	});
+				transaction.Complete();
 
-		//if (role is null)
-		//{
-		//	return Result.Failure<LoginUserResultDTO>(Error.NullValue);
-		//}
+				if (affectedRow is > 0)
+				{
+					return Result.Success<bool>(true);
+				}
+			}
+			catch (Exception)
+			{
+				transaction.Dispose();
 
-		//// Building the object
-		//var userData = new LoginUserResultDTO(user, role);
+				return Result.Failure<bool>(Error.NullValue);
+			}
 
-		//return Result.Success<LoginUserResultDTO>(userData);
-
-		//return await Result.Success<bool>(true);
-
-		return false;
+			return Result.Failure<bool>(Error.NullValue);
+		}
 	}
 }
