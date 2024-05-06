@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Transactions;
 using WinglyShop.Application.Abstractions.Data;
 using WinglyShop.Application.Abstractions.Messaging;
+using WinglyShop.Domain.Entities.Users;
 using WinglyShop.Shared;
 
 namespace WinglyShop.Application.Authentication.Register;
@@ -25,19 +26,26 @@ internal sealed class RegisterCommandHandler : ICommandHandler<RegisterCommand, 
 		if (command is null)
 			throw new ArgumentNullException(nameof(command));
 
+		// Creating a new User based on UserDTO
+		var user = new User(command.User);
+
+		// Modifying some client-inaccessible properties (Temp)
+		user.IdRole = 1;
+		user.IsActive = true;
+
 		// Inserting data
 		try
 		{
 			// Checking if the user already exists
 			var userExists = await _context.Users
-				.AnyAsync(x => x.Login == command.User.Login);
+				.AnyAsync(x => x.Login == user.Login);
 
 			// Validate if user already exists
 			if (userExists is true)
 				return Result.Failure<bool>(new Error("Error", "User already exists."));
 
 			// Insert data into database
-			await _context.Users.AddAsync(command.User);
+			await _context.Users.AddAsync(user);
 		}
 		catch (Exception ex)
 		{

@@ -1,5 +1,5 @@
-using WinglyShop.Domain.Entities.Users;
+using WinglyShop.Domain.Common.DTOs.Users;
 
 namespace WinglyShop.Application.Authentication.Register;
 
-public record RegisterRequest(User User);
+public record RegisterRequest(UserDTO User);
