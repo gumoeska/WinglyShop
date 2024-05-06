@@ -6,7 +6,7 @@ using System.Text;
 using WinglyShop.API.Abstractions.Auth;
 using WinglyShop.Application.Authentication.DTOs;
 using WinglyShop.Application.Authentication.Login;
-using WinglyShop.Domain.Entities.User;
+using WinglyShop.Domain.Entities.Users;
 
 namespace WinglyShop.API.Services.Auth;
 

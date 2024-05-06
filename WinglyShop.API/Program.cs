@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using System.Transactions;
 using WinglyShop.API.Abstractions.Auth;
 using WinglyShop.API.Configurations;
 using WinglyShop.API.Services.Auth;
@@ -44,7 +46,26 @@ namespace WinglyShop.API
 			builder.Services
 				.AddSwaggerGen(x => x.SwaggerDoc("v1", new OpenApiInfo { Title = "WinglyShop.API", Version = "v1" }));
 
+			// EF Core
+			builder.Services.AddDbContext<DatabaseContext>(options =>
+			{
+				var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+				options.UseSqlServer(connectionString, sqlServerAction =>
+				{
+					sqlServerAction.EnableRetryOnFailure(3);
+					sqlServerAction.CommandTimeout(30);
+				});
+
+				options.EnableDetailedErrors(true);
+				options.EnableSensitiveDataLogging(true);
+			});
+
+			builder.Services.AddScoped<IDatabaseContext, DatabaseContext>(); // Database
+
+			// Dapper
 			builder.Services.AddScoped<IDbConnection, DbConnection>(); // Database
+
 			builder.Services.AddScoped<IDispatcher, Dispatcher>(); // Dispatcher
 			builder.Services.AddScoped<ITokenService, TokenService>(); // Token Service
 			builder.Services.AddHandlersFromAssembly(typeof(AssemblyReference).Assembly); // Scan the Handlers

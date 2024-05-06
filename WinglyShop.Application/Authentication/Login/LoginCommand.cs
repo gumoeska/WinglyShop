@@ -1,6 +1,5 @@
 ﻿using WinglyShop.Application.Abstractions.Messaging;
 using WinglyShop.Application.Authentication.DTOs;
-using WinglyShop.Domain.Entities.User;
 
 namespace WinglyShop.Application.Authentication.Login;
 

@@ -1,19 +1,23 @@
-﻿using WinglyShop.Application.Abstractions.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using WinglyShop.Application.Abstractions.Data;
 using WinglyShop.Application.Abstractions.Messaging;
-using WinglyShop.Domain.Entities.User;
+using WinglyShop.Domain.Entities.Users;
 using WinglyShop.Shared;
 
 namespace WinglyShop.Application.Users.Get;
 
-internal sealed class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, User>
+internal sealed class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, User?>
 {
     private readonly IDbConnection _dbConnection;
+	private readonly IDatabaseContext _context;
 
-    public GetUserByIdQueryHandler(IDbConnection dbConnection) 
-		=> (_dbConnection) = (dbConnection);
+    public GetUserByIdQueryHandler(IDbConnection dbConnection, IDatabaseContext context) 
+		=> (_dbConnection, _context) = (dbConnection, context);
 
-	public Task<Result<User>> Handle(GetUserByIdQuery query, CancellationToken cancellationToken)
+	public async Task<Result<User?>> Handle(GetUserByIdQuery query, CancellationToken cancellationToken)
 	{
-		throw new NotImplementedException();
+		var test = await _context.Users.Where(x => x.Id == 1).FirstOrDefaultAsync();
+
+		return Result.Success<User?>(test);
 	}
 }

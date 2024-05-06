@@ -7,7 +7,7 @@ using WinglyShop.Application.Abstractions.Dispatcher;
 using WinglyShop.Application.Authentication.DTOs;
 using WinglyShop.Application.Authentication.Login;
 using WinglyShop.Application.Authentication.Register;
-using WinglyShop.Domain.Entities.User;
+using WinglyShop.Domain.Entities.Users;
 using WinglyShop.Shared;
 
 namespace WinglyShop.API.Controllers;
@@ -16,11 +16,13 @@ namespace WinglyShop.API.Controllers;
 public class AuthController : ApiController
 {
 	private readonly ITokenService _tokenService;
+	private readonly IDatabaseContext _databaseContext;
 
-	public AuthController(IDbConnection dbConnection, IDispatcher dispatcher, ITokenService tokenService)
+	public AuthController(IDbConnection dbConnection, IDispatcher dispatcher, ITokenService tokenService, IDatabaseContext databaseContext)
 		: base(dbConnection, dispatcher)
 	{
 		_tokenService = tokenService;
+		_databaseContext = databaseContext;
 	}
 
 	[HttpPost("Login")]
