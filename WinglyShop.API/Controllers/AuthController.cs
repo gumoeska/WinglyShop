@@ -54,18 +54,23 @@ public class AuthController : ApiController
 	[HttpPost("Register")]
 	public async Task<IActionResult> RegisterAccount([FromBody] RegisterRequest request, CancellationToken cancellationToken)
 	{
-		//if (request is null)
-		//	return null;
+		// Creating the command
+		var command = new RegisterCommand(request.user);
 
-		//var command = new RegisterCommand(request.email, request.password);
+		// Sending the request to the handler
+		var userRequest = await _dispatcher.Send<RegisterCommand, bool>(command, cancellationToken);
 
-		//Result<Guid> result = await _dispatcher.Send<RegisterCommand, Guid>(command, cancellationToken);
+		// Validating the request
+		if (userRequest is { IsFailure: true })
+			return BadRequest(userRequest.Error);
 
-		//if (result.IsFailure)
-		//	return null;
+		// Get the user
+		var userResponse = userRequest.Value;
 
-		Result<Guid> result = Guid.NewGuid();
+		// Validate the userResponse
+		if (userResponse is false)
+			return BadRequest("An error occoured.");
 
-		return Ok(result);
+		return Ok(Result.Success<bool>(true));
 	}
 }

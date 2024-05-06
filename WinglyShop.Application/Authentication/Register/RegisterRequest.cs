@@ -1,4 +1,4 @@
-﻿using WinglyShop.Domain.Entities.Users;
+using WinglyShop.Domain.Entities.Users;
 
 namespace WinglyShop.Application.Authentication.Register;
 
