@@ -33,7 +33,8 @@ internal sealed class LoginCommandHandler : ICommandHandler<LoginCommand, LoginU
 		// Validate the user
 		if (user is null)
 		{
-			return Result.Failure<LoginUserResultDTO>(Error.NullValue);
+			//return Result.Failure<LoginUserResultDTO>(Error.NullValue);
+			return Result.Failure<LoginUserResultDTO>(new Error("Error", "User doesn't exist."));
 		}
 
 		// if the user is not null, return the role
@@ -43,7 +44,7 @@ internal sealed class LoginCommandHandler : ICommandHandler<LoginCommand, LoginU
 
 		if (role is null)
 		{
-			return Result.Failure<LoginUserResultDTO>(Error.NullValue);
+			return Result.Failure<LoginUserResultDTO>(new Error("Error", "Invalid Role."));
 		}
 
 		// Building the object

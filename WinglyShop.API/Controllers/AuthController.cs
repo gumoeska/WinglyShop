@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WinglyShop.API.Abstractions;
 using WinglyShop.API.Abstractions.Auth;
-using WinglyShop.API.Services.Auth;
 using WinglyShop.Application.Abstractions.Data;
 using WinglyShop.Application.Abstractions.Dispatcher;
 using WinglyShop.Application.Authentication.DTOs;
@@ -43,7 +42,7 @@ public class AuthController : ApiController
 
 		// Validate the userResponse
 		if (userResponse is null)
-			return BadRequest("User not found.");
+			return BadRequest(userResponse);
 
 		// Generating the token
 		var token = _tokenService.GenerateToken(userResponse);

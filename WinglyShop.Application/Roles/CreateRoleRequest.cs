@@ -1,4 +1,4 @@
-﻿using WinglyShop.Domain.Entities.Role;
+﻿using WinglyShop.Domain.Entities.Roles;
 
 namespace WinglyShop.Application.Roles;
 
