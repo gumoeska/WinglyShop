@@ -2,17 +2,17 @@
 using WinglyShop.API.Abstractions;
 using WinglyShop.Application.Abstractions.Data;
 using WinglyShop.Application.Abstractions.Dispatcher;
-using WinglyShop.Application.Order.DeleteOrder;
-using WinglyShop.Application.Order.GetOrder;
+using WinglyShop.Application.Orders.DeleteOrder;
+using WinglyShop.Application.Orders.GetOrder;
 using WinglyShop.Shared;
 
 namespace WinglyShop.API.Controllers;
 
 [Route("api/[controller]")]
-public class OrderController : ApiController
+public class OrdersController : ApiController
 {
-    public OrderController(IDbConnection dbConnection, IDispatcher dispatcher)
-		: base(dbConnection, dispatcher)
+    public OrdersController(IDatabaseContext databaseContext, IDbConnection dbConnection, IDispatcher dispatcher)
+		: base(databaseContext, dbConnection, dispatcher)
 	{
     }
 

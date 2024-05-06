@@ -1,3 +1,3 @@
 ﻿namespace WinglyShop.Application.Authentication.Login;
 
-public record LoginRequest(string login, string password);
+public record LoginRequest(string Login, string Password);

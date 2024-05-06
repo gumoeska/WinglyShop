@@ -1,5 +1,3 @@
-﻿using System;
-
-namespace WinglyShop.Application.Order.GetOrder;
+﻿namespace WinglyShop.Application.Orders.GetOrder;
 
 public record GetOrderRequest(int userId, Guid userToken, int orderId);

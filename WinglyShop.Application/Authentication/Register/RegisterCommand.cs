@@ -3,4 +3,4 @@ using WinglyShop.Domain.Entities.Users;
 
 namespace WinglyShop.Application.Authentication.Register;
 
-public sealed record RegisterCommand(User user) : ICommand<bool>;
+public sealed record RegisterCommand(User User) : ICommand<bool>;

@@ -9,14 +9,14 @@ namespace WinglyShop.API.Controllers;
 
 [Authorize(Roles = "Admin")]
 [Route("api/[controller]")]
-public class RoleController : ApiController
+public class RolesController : ApiController
 {
-    public RoleController(IDbConnection dbConnection, IDispatcher dispatcher)
-        : base(dbConnection, dispatcher)
+    public RolesController(IDatabaseContext databaseContext, IDbConnection dbConnection, IDispatcher dispatcher)
+        : base(databaseContext, dbConnection, dispatcher)
     {
     }
 
-    [HttpPost("Create")]
+    [HttpPost("")]
     public async Task<IActionResult> CreateRole([FromBody] CreateRoleRequest request, CancellationToken cancellationToken)
     {
         // Creating the command

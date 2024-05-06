@@ -26,14 +26,13 @@ internal sealed class LoginCommandHandler : ICommandHandler<LoginCommand, LoginU
 
 		// Try to return the user
 		var user = await _context.Users
-			.Where(x => x.Login == command.logIn 
-					 && x.Password == command.password)
+			.Where(x => x.Login == command.Login 
+					 && x.Password == command.Password)
 			.FirstOrDefaultAsync();
 
 		// Validate the user
 		if (user is null)
 		{
-			//return Result.Failure<LoginUserResultDTO>(Error.NullValue);
 			return Result.Failure<LoginUserResultDTO>(new Error("Error", "User doesn't exist."));
 		}
 
@@ -50,7 +49,7 @@ internal sealed class LoginCommandHandler : ICommandHandler<LoginCommand, LoginU
 		// Building the object
 		var userData = new LoginUserResultDTO(user, role);
 
-		return Result.Success<LoginUserResultDTO>(userData);
+		return Result.Success(userData);
 	}
 
 	#region Old handler using Dapper
@@ -73,8 +72,8 @@ internal sealed class LoginCommandHandler : ICommandHandler<LoginCommand, LoginU
 			logInQuery,
 			new
 			{
-				Login = command.logIn,
-				Password = command.password
+				Login = command.Login,
+				Password = command.Password
 			});
 
 		// Validate the user

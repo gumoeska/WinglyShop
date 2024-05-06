@@ -15,20 +15,22 @@ namespace WinglyShop.API.Controllers;
 public class AuthController : ApiController
 {
 	private readonly ITokenService _tokenService;
-	private readonly IDatabaseContext _databaseContext;
 
-	public AuthController(IDbConnection dbConnection, IDispatcher dispatcher, ITokenService tokenService, IDatabaseContext databaseContext)
-		: base(dbConnection, dispatcher)
+	public AuthController(
+		IDatabaseContext databaseContext, 
+		IDbConnection dbConnection, 
+		IDispatcher dispatcher, 
+		ITokenService tokenService)
+		: base(databaseContext, dbConnection, dispatcher)
 	{
 		_tokenService = tokenService;
-		_databaseContext = databaseContext;
 	}
 
 	[HttpPost("Login")]
 	public async Task<IActionResult> LoginAccount([FromBody] LoginRequest request, CancellationToken cancellationToken)
 	{
 		// Creating the command
-		var command = new LoginCommand(request.login, request.password);
+		var command = new LoginCommand(request.Login, request.Password);
 
 		// Sending the request to the handler
 		var userRequest = await _dispatcher.Send<LoginCommand, LoginUserResultDTO>(command, cancellationToken);
@@ -54,7 +56,7 @@ public class AuthController : ApiController
 	public async Task<IActionResult> RegisterAccount([FromBody] RegisterRequest request, CancellationToken cancellationToken)
 	{
 		// Creating the command
-		var command = new RegisterCommand(request.user);
+		var command = new RegisterCommand(request.User);
 
 		// Sending the request to the handler
 		var userRequest = await _dispatcher.Send<RegisterCommand, bool>(command, cancellationToken);

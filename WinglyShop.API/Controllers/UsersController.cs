@@ -3,49 +3,46 @@ using Microsoft.AspNetCore.Mvc;
 using WinglyShop.API.Abstractions;
 using WinglyShop.Application.Abstractions.Data;
 using WinglyShop.Application.Abstractions.Dispatcher;
-using WinglyShop.Application.Cart;
+using WinglyShop.Application.Carts;
 using WinglyShop.Application.Users.Delete;
 using WinglyShop.Application.Users.Get;
 using WinglyShop.Application.Users.Update;
 using WinglyShop.Application.Wishlist;
 using WinglyShop.Domain.Entities.Users;
-using WinglyShop.Infrastructure;
 using WinglyShop.Shared;
 
 namespace WinglyShop.API.Controllers;
 
 [Authorize]
 [Route("api/[controller]")]
-public class UserController : ApiController
+public class UsersController : ApiController
 {
-	private readonly IDatabaseContext _databaseContext;
-
-    public UserController(IDatabaseContext databaseContext ,IDbConnection dbConnection, IDispatcher dispatcher)
-		: base(dbConnection, dispatcher)
+    public UsersController(IDatabaseContext databaseContext ,IDbConnection dbConnection, IDispatcher dispatcher)
+		: base(databaseContext, dbConnection, dispatcher)
 	{
-		_databaseContext = databaseContext;
     }
 
-	[HttpGet("GetUser"), Authorize(Roles = "Admin")]
+	[HttpGet("GetUser")]
 	public async Task<IActionResult> GetUserById([FromBody] GetUserByIdRequest request, CancellationToken cancellationToken)
 	{
-		// Validation
-		if (request is null)
-			return null;
+		// Creating the query
+		var query = new GetUserByIdQuery(request.userId);
 
-		var command = new GetUserByIdQuery(request.userId);
+		// Sending the request to the handler
+		var userRequest = await _dispatcher.Query<GetUserByIdQuery, User?>(query, cancellationToken);
 
-		var result = await _dispatcher.Query<GetUserByIdQuery, User>(command, cancellationToken);
+		// Validate the request
+		if (userRequest is { IsFailure: true })
+			return BadRequest(userRequest.Error);
 
-		// Test
-		//Result<string> tokenResult = await _dispatcher.Send<LoginCommand, string>(command, cancellationToken);
+		// Get the User
+		var userResponse = userRequest.Value;
 
-		//if (tokenResult.IsFailure)
-		//	return null;
+		// Validate the userResponse
+		if (userResponse is null)
+			return BadRequest(userResponse);
 
-		Result<string> tokenResult = "Test";
-
-		return Ok(tokenResult);
+		return Ok(Result.Success<User?>(userResponse));
 	}
 
 	[HttpPut("Edit")]

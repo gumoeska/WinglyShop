@@ -3,4 +3,4 @@ using WinglyShop.Domain.Entities.Users;
 
 namespace WinglyShop.Application.Authentication.DTOs;
 
-public sealed record LoginUserResultDTO(User user, Role role);
+public sealed record LoginUserResultDTO(User User, Role Role);
