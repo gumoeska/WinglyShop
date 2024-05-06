@@ -1,5 +1,5 @@
-﻿using WinglyShop.Domain.Entities.Role;
-using WinglyShop.Domain.Entities.User;
+﻿using WinglyShop.Domain.Entities.Roles;
+using WinglyShop.Domain.Entities.Users;
 
 namespace WinglyShop.Application.Authentication.DTOs;
 

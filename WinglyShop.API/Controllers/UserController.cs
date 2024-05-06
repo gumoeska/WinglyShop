@@ -8,7 +8,8 @@ using WinglyShop.Application.Users.Delete;
 using WinglyShop.Application.Users.Get;
 using WinglyShop.Application.Users.Update;
 using WinglyShop.Application.Wishlist;
-using WinglyShop.Domain.Entities.User;
+using WinglyShop.Domain.Entities.Users;
+using WinglyShop.Infrastructure;
 using WinglyShop.Shared;
 
 namespace WinglyShop.API.Controllers;
@@ -17,9 +18,12 @@ namespace WinglyShop.API.Controllers;
 [Route("api/[controller]")]
 public class UserController : ApiController
 {
-    public UserController(IDbConnection dbConnection, IDispatcher dispatcher)
+	private readonly IDatabaseContext _databaseContext;
+
+    public UserController(IDatabaseContext databaseContext ,IDbConnection dbConnection, IDispatcher dispatcher)
 		: base(dbConnection, dispatcher)
 	{
+		_databaseContext = databaseContext;
     }
 
 	[HttpGet("GetUser"), Authorize(Roles = "Admin")]
@@ -31,7 +35,7 @@ public class UserController : ApiController
 
 		var command = new GetUserByIdQuery(request.userId);
 
-		var result = _dispatcher.Query<GetUserByIdQuery, User>(command, cancellationToken);
+		var result = await _dispatcher.Query<GetUserByIdQuery, User>(command, cancellationToken);
 
 		// Test
 		//Result<string> tokenResult = await _dispatcher.Send<LoginCommand, string>(command, cancellationToken);

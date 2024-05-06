@@ -1,4 +1,4 @@
-﻿using WinglyShop.Domain.Entities.User;
+﻿using WinglyShop.Domain.Entities.Users;
 
 namespace WinglyShop.Application.Users.Update;
 
