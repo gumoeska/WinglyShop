@@ -22,4 +22,6 @@ public interface IDatabaseContext
 	DbSet<OrderDetail> OrderDetails { get; set; }
 	DbSet<Product> Products { get; set; }
 	DbSet<Role> Roles { get; set; }
+
+	Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
