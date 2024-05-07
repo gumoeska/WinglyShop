@@ -4,6 +4,7 @@ using WinglyShop.Application.Abstractions.Data;
 using WinglyShop.Application.Abstractions.Dispatcher;
 using WinglyShop.Application.Orders.DeleteOrder;
 using WinglyShop.Application.Orders.GetOrder;
+using WinglyShop.Application.Orders.PlaceOrder;
 using WinglyShop.Shared;
 
 namespace WinglyShop.API.Controllers;
@@ -15,6 +16,17 @@ public class OrdersController : ApiController
 		: base(databaseContext, dbConnection, dispatcher)
 	{
     }
+
+	[HttpPost("PlaceOrder")]
+	public async Task<IActionResult> PlaceOrder([FromBody] PlaceOrderRequest request, CancellationToken cancellationToken)
+	{
+		// Creating the command
+		
+
+
+
+
+	}
 
 	[HttpGet("GetOrder")]
 	public async Task<IActionResult> GetOrderById([FromBody] GetOrderRequest request, CancellationToken cancellationToken)

@@ -6,6 +6,7 @@ using WinglyShop.Application.Abstractions.Dispatcher;
 using WinglyShop.Application.Carts;
 using WinglyShop.Application.Users.Delete;
 using WinglyShop.Application.Users.Get;
+using WinglyShop.Application.Users.GetById;
 using WinglyShop.Application.Users.Update;
 using WinglyShop.Application.Wishlist;
 using WinglyShop.Domain.Entities.Users;
@@ -22,7 +23,23 @@ public class UsersController : ApiController
 	{
     }
 
-	[HttpGet("GetUser")]
+	[HttpGet]
+	public async Task<IActionResult> GetAllUsers(CancellationToken cancellationToken)
+	{
+		// Creating the query
+		var query = new GetUsersQuery();
+
+		// Sending the request to the handler
+		var userRequest = await _dispatcher.Query<GetUsersQuery, List<User>>(query, cancellationToken);
+
+		// Validate the response
+		if (userRequest is { IsFailure: true })
+			return BadRequest(userRequest.Error);
+
+		return Ok(Result.Success(userRequest.Value));
+	}
+
+	[HttpGet("{id}")]
 	public async Task<IActionResult> GetUserById([FromBody] GetUserByIdRequest request, CancellationToken cancellationToken)
 	{
 		// Creating the query
@@ -48,84 +65,25 @@ public class UsersController : ApiController
 	[HttpPut("Edit")]
 	public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequest request, CancellationToken cancellationToken)
 	{
-		// Validation
-		if (request is null)
-			return null;
-
-		var command = new UpdateUserCommand(request.user);
-
-		// Test
-
-		//Result<string> tokenResult = await _dispatcher.Send<LoginCommand, string>(command, cancellationToken);
-
-		//if (tokenResult.IsFailure)
-		//	return null;
-
-		Result<string> tokenResult = "Test";
-
-		return Ok(tokenResult);
+		return Ok();
 	}
 
-	[HttpPut("Delete")]
+	[HttpDelete("Delete")]
 	public async Task<IActionResult> DeleteUser([FromBody] DeleteUserRequest request, CancellationToken cancellationToken)
 	{
-		// Validation
-		if (request is null)
-			return null;
-
-		//var command = new UpdateUserCommand(request.user);
-
-		// Test
-
-		//Result<string> tokenResult = await _dispatcher.Send<LoginCommand, string>(command, cancellationToken);
-
-		//if (tokenResult.IsFailure)
-		//	return null;
-
-		Result<string> tokenResult = "Test";
-
-		return Ok(tokenResult);
+		return Ok();
 	}
 
 	[HttpPost("AddProductCart")]
 	public async Task<IActionResult> AddProductCart([FromBody] AddProductCartRequest request, CancellationToken cancellationToken)
 	{
-		if (request is null)
-			return null;
-
-		var command = new AddProductCartCommand(
-			request.cartId,
-			request.productId,
-			request.quantity);
-
-		//Result<string> tokenResult = await _dispatcher.Send<LoginCommand, string>(command, cancellationToken);
-
-		//if (tokenResult.IsFailure)
-		//	return null;
-
-		Result<string> tokenResult = "Test";
-
-		return Ok(tokenResult);
+		return Ok();
 	}
 
 	[HttpPost("AddProductWishlist")]
 	public async Task<IActionResult> AddProductWishlist([FromBody] AddProductWishlistRequest request, CancellationToken cancellationToken)
 	{
-		if (request is null)
-			return null;
-
-		var command = new AddProductWishlistCommand(
-			request.userId,
-			request.productId);
-
-		//Result<string> tokenResult = await _dispatcher.Send<LoginCommand, string>(command, cancellationToken);
-
-		//if (tokenResult.IsFailure)
-		//	return null;
-
-		Result<string> tokenResult = "Test";
-
-		return Ok(tokenResult);
+		return Ok();
 	}
 }
 

@@ -1,17 +1,39 @@
-﻿using WinglyShop.Domain.Entities.OrderDetails;
+﻿using WinglyShop.Domain.Common.DTOs.Orders;
+using WinglyShop.Domain.Common.Enums.Order;
+using WinglyShop.Domain.Common.Enums.Payment;
+using WinglyShop.Domain.Entities.OrderDetails;
 using WinglyShop.Domain.Entities.Users;
 
 namespace WinglyShop.Domain.Entities.Orders;
 
 public partial class Order
 {
-    public int Id { get; set; }
+    public Order(OrderDTO order)
+    {
+        Status = order.Status;
+        IdUser = order.UserId;
+        OrderDate = order.Date;
+        Status = order.Status;
+        PaymentMethod = order.PaymentMethod;
+        TotalValue = order.TotalValue;
+        OrderDetails = order.OrderDetails;
+    }
 
-    public int? Status { get; set; }
+	//public sealed record OrderDTO(
+	//int UserId,
+	//DateTime Date,
+	//OrderStatus Status,
+	//PaymentMethod PaymentMethod,
+	//decimal TotalValue,
+	//List<OrderDetailDTO> OrderDetails);
+
+	public int Id { get; set; }
+
+    public OrderStatus? Status { get; set; }
 
     public DateTime? OrderDate { get; set; }
 
-    public int? PaymentMethod { get; set; }
+    public PaymentMethod? PaymentMethod { get; set; }
 
     public decimal? TotalValue { get; set; }
 

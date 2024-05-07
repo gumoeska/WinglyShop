@@ -3,4 +3,4 @@ using WinglyShop.Domain.Entities.Users;
 
 namespace WinglyShop.Application.Users.Get;
 
-public sealed record GetUserByIdQuery(int userId) : IQuery<User?>;
+public sealed record GetUsersQuery() : IQuery<List<User>>;
