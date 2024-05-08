@@ -21,8 +21,8 @@ public class OrdersController : ApiController
 	public async Task<IActionResult> PlaceOrder([FromBody] PlaceOrderRequest request, CancellationToken cancellationToken)
 	{
 		// Creating the command
-		
 
+		return Ok();
 
 
 

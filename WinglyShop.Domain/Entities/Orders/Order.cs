@@ -8,16 +8,16 @@ namespace WinglyShop.Domain.Entities.Orders;
 
 public partial class Order
 {
-    public Order(OrderDTO order)
-    {
-        Status = order.Status;
-        IdUser = order.UserId;
-        OrderDate = order.Date;
-        Status = order.Status;
-        PaymentMethod = order.PaymentMethod;
-        TotalValue = order.TotalValue;
-        OrderDetails = order.OrderDetails;
-    }
+    //public Order(OrderDTO order)
+    //{
+    //    Status = order.Status;
+    //    IdUser = order.UserId;
+    //    OrderDate = order.Date;
+    //    Status = order.Status;
+    //    PaymentMethod = order.PaymentMethod;
+    //    TotalValue = order.TotalValue;
+    //    OrderDetails = order.OrderDetails;
+    //}
 
 	//public sealed record OrderDTO(
 	//int UserId,

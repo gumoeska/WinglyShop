@@ -18,12 +18,20 @@ namespace WinglyShop.API.Controllers;
 [Route("api/[controller]")]
 public class UsersController : ApiController
 {
+
+	private enum Roles
+	{
+		Admin,
+		NoAdmin
+	}
+
     public UsersController(IDatabaseContext databaseContext ,IDbConnection dbConnection, IDispatcher dispatcher)
 		: base(databaseContext, dbConnection, dispatcher)
 	{
     }
 
 	[HttpGet]
+	[Authorize(Roles =  nameof(Roles.Admin))]
 	public async Task<IActionResult> GetAllUsers(CancellationToken cancellationToken)
 	{
 		// Creating the query
