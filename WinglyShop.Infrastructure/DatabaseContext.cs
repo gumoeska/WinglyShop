@@ -222,10 +222,6 @@ public partial class DatabaseContext : DbContext, IDatabaseContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Access).HasColumnName("access");
-            entity.Property(e => e.Description)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("description");
             entity.Property(e => e.IsActive).HasColumnName("isActive");
         });
 

@@ -21,7 +21,9 @@ public class TokenService : ITokenService
 	{
 		List<Claim> claims = new List<Claim>
 		{
-			new Claim(ClaimTypes.Name, userData.User.Login),
+			new Claim(ClaimTypes.UserData, userData.User.Login),
+			new Claim(ClaimTypes.Name, userData.User.Name),
+			new Claim(ClaimTypes.Surname, userData.User.Surname),
 			new Claim(ClaimTypes.Role, userData.Role.Access.GetDisplayName())
 		};
 

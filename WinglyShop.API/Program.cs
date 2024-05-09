@@ -31,6 +31,8 @@ namespace WinglyShop.API
 			builder.Services.AddControllers();
 			builder.Services.AddEndpointsApiExplorer();
 
+			builder.Services.AddHttpContextAccessor();
+
 			builder.Configuration.AddConfiguration(configuration);
 
 			builder.Services.AddCors(policy =>

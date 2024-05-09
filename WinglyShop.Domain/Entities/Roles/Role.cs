@@ -9,8 +9,6 @@ public partial class Role
 {
     public int Id { get; set; }
 
-    public string? Description { get; set; }
-
     public RoleAccess Access { get; set; }
 
     public bool? IsActive { get; set; }

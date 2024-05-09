@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WinglyShop.API.Abstractions;
 using WinglyShop.API.Abstractions.Auth;
 using WinglyShop.Application.Abstractions.Data;
@@ -20,12 +21,14 @@ public class AuthController : ApiController
 		IDatabaseContext databaseContext, 
 		IDbConnection dbConnection, 
 		IDispatcher dispatcher, 
-		ITokenService tokenService)
-		: base(databaseContext, dbConnection, dispatcher)
+		ITokenService tokenService,
+		IHttpContextAccessor contextAccessor)
+		: base(databaseContext, dbConnection, dispatcher, contextAccessor)
 	{
 		_tokenService = tokenService;
 	}
 
+	[AllowAnonymous]
 	[HttpPost("Login")]
 	public async Task<IActionResult> LoginAccount([FromBody] LoginRequest request, CancellationToken cancellationToken)
 	{
@@ -52,6 +55,7 @@ public class AuthController : ApiController
 		return Ok(Result.Success<string>(token));
 	}
 
+	[AllowAnonymous]
 	[HttpPost("Register")]
 	public async Task<IActionResult> RegisterAccount([FromBody] RegisterRequest request, CancellationToken cancellationToken)
 	{

@@ -10,8 +10,12 @@ namespace WinglyShop.API.Controllers;
 [Route("api/[controller]")]
 public class CartController : ApiController
 {
-    public CartController(IDatabaseContext databaseContext, IDbConnection dbConnection, IDispatcher dispatcher)
-		: base(databaseContext, dbConnection, dispatcher)
+    public CartController(
+		IDatabaseContext databaseContext, 
+		IDbConnection dbConnection, 
+		IDispatcher dispatcher, 
+		IHttpContextAccessor contextAccessor)
+		: base(databaseContext, dbConnection, dispatcher, contextAccessor)
 	{
     }
 

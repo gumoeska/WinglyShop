@@ -13,8 +13,12 @@ namespace WinglyShop.API.Controllers;
 [Route("api/[controller]")]
 public class RolesController : ApiController
 {
-    public RolesController(IDatabaseContext databaseContext, IDbConnection dbConnection, IDispatcher dispatcher)
-        : base(databaseContext, dbConnection, dispatcher)
+    public RolesController(
+		IDatabaseContext databaseContext, 
+		IDbConnection dbConnection, 
+		IDispatcher dispatcher, 
+		IHttpContextAccessor contextAccessor)
+        : base(databaseContext, dbConnection, dispatcher, contextAccessor)
     {
     }
 

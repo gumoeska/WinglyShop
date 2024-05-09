@@ -19,8 +19,12 @@ namespace WinglyShop.API.Controllers;
 [Route("api/[controller]")]
 public class UsersController : ApiController
 {
-    public UsersController(IDatabaseContext databaseContext ,IDbConnection dbConnection, IDispatcher dispatcher)
-		: base(databaseContext, dbConnection, dispatcher)
+    public UsersController(
+		IDatabaseContext databaseContext, 
+		IDbConnection dbConnection, 
+		IDispatcher dispatcher, 
+		IHttpContextAccessor contextAccessor)
+		: base(databaseContext, dbConnection, dispatcher, contextAccessor)
 	{
     }
 
