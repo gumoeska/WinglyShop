@@ -3,4 +3,4 @@ using WinglyShop.Domain.Entities.Roles;
 
 namespace WinglyShop.Application.Roles;
 
-public sealed record CreateRoleCommand(Role role) : ICommand<bool>;
+public sealed record CreateRoleCommand(Role Role) : ICommand<bool>;

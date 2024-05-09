@@ -10,7 +10,6 @@ GO
 
 CREATE TABLE Roles(
     id INT PRIMARY KEY IDENTITY,
-    description VARCHAR(255),
     access INT,
     isActive BIT
 );

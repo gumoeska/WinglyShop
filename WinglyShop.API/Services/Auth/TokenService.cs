@@ -1,12 +1,10 @@
-﻿using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Extensions;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using WinglyShop.API.Abstractions.Auth;
 using WinglyShop.Application.Authentication.DTOs;
-using WinglyShop.Application.Authentication.Login;
-using WinglyShop.Domain.Entities.Users;
 
 namespace WinglyShop.API.Services.Auth;
 
@@ -24,7 +22,7 @@ public class TokenService : ITokenService
 		List<Claim> claims = new List<Claim>
 		{
 			new Claim(ClaimTypes.Name, userData.User.Login),
-			new Claim(ClaimTypes.Role, userData.Role.Description)
+			new Claim(ClaimTypes.Role, userData.Role.Access.GetDisplayName())
 		};
 
 		var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey.Key));

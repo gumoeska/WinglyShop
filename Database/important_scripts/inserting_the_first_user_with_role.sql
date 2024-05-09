@@ -5,8 +5,8 @@
 SET IDENTITY_INSERT [Roles] ON;
 
 
-INSERT INTO [Roles] ([id], [description], [access], [isActive])
-VALUES (1, 'Admin', 100, '1');
+INSERT INTO [Roles] ([id], [access], [isActive])
+VALUES (1, 100, '1');
 
 SET IDENTITY_INSERT [Roles] OFF;
 

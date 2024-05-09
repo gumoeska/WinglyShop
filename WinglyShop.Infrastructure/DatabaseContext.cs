@@ -41,7 +41,9 @@ public partial class DatabaseContext : DbContext, IDatabaseContext
 
     public virtual DbSet<User> Users { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+	public Guid TransactionId => throw new NotImplementedException();
+
+	protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Address>(entity =>
         {
@@ -275,5 +277,5 @@ public partial class DatabaseContext : DbContext, IDatabaseContext
         OnModelCreatingPartial(modelBuilder);
     }
 
-    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+	partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

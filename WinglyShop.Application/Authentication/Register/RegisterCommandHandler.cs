@@ -46,6 +46,7 @@ internal sealed class RegisterCommandHandler : ICommandHandler<RegisterCommand, 
 
 			// Insert data into database
 			await _context.Users.AddAsync(user);
+			await _context.SaveChangesAsync();
 		}
 		catch (Exception ex)
 		{
