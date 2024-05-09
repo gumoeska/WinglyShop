@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -30,8 +31,6 @@ namespace WinglyShop.API
 
 			builder.Services.AddControllers();
 			builder.Services.AddEndpointsApiExplorer();
-
-			builder.Services.AddHttpContextAccessor();
 
 			builder.Configuration.AddConfiguration(configuration);
 
@@ -89,9 +88,28 @@ namespace WinglyShop.API
 					ValidateIssuerSigningKey = true,
 					IssuerSigningKey = new SymmetricSecurityKey(secretKey),
 					ValidateIssuer = false,
-					ValidateAudience = false
+					ValidateAudience = false,
+					ClockSkew = TimeSpan.Zero
 				};
 			});
+
+			//services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+			//	.AddJwtBearer(options =>
+			//	{
+			//		options.RequireHttpsMetadata = false;
+			//		options.SaveToken = true;
+			//		options.TokenValidationParameters = new TokenValidationParameters
+			//		{
+			//			ValidateIssuer = false,
+			//			ValidateAudience = false,
+			//			//ValidateLifetime = true,
+			//			ValidateIssuerSigningKey = true,
+			//			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+			//			ClockSkew = TimeSpan.Zero
+			//		};
+			//	});
+
+			builder.Services.AddHttpContextAccessor();
 
 			var app = builder.Build();
 

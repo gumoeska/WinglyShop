@@ -15,7 +15,7 @@ public class ApiController : ControllerBase
 	protected readonly IDatabaseContext _databaseContext;
 	protected readonly IHttpContextAccessor _contextAccessor;
 
-	protected User _userDataContext { get; set; }
+	protected User _userDataContext { get; set; } = new();
 
 	protected ApiController(IDatabaseContext databaseContext, IDbConnection dbConnection, IDispatcher dispatcher, IHttpContextAccessor contextAccessor)
 	{
@@ -34,10 +34,15 @@ public class ApiController : ControllerBase
 	{
 		if (user.Identity.IsAuthenticated)
 		{
-			_userDataContext.Login = user.Claims.SingleOrDefault(x => x.Type == nameof(ClaimTypes.UserData)).Value.ToString();
+			_userDataContext = new User();
+
+			_userDataContext.Login = user.Claims.SingleOrDefault(x => x.Type == "Type = \"http://schemas.microsoft.com/ws/2008/06/identity/claims/userdata\"").Value.ToString();
 			_userDataContext.Name = user.Claims.SingleOrDefault(x => x.Type == nameof(ClaimTypes.Name)).Value.ToString();
 			_userDataContext.Surname = user.Claims.SingleOrDefault(x => x.Type == nameof(ClaimTypes.Surname)).Value.ToString();
 			//_userDataContext.Role = user.Claims.SingleOrDefault(x => x.Type == nameof(ClaimTypes.Role)).Value.ToString();
+
+
+			//contextAccessor.HttpContext.User.Claims.SingleOrDefault(x => x.Type == nameof(VariaveisUsuario.Dados.UserName)).Value
 		}
 	}
 }
