@@ -12,12 +12,11 @@ VALUES (1, 100, 1);
 INSERT INTO [Roles] ([id], [access], [isActive])
 VALUES (2, 0, 1);
 
--- Premium Customer --
+-- Manager --
 INSERT INTO [Roles] ([id], [access], [isActive])
-VALUES (3, 1, 1);
+VALUES (3, 5, 1);
 
 SET IDENTITY_INSERT [Roles] OFF;
-
 
 --------------------------------------
 --      Insert  the First User      --
@@ -29,7 +28,6 @@ INSERT INTO [User] ([id], [login], [email], [password], [name], [surname], [imag
 VALUES (1, 'admin', 'admin@admin.com', 'admin', 'adminName', 'adminSurname', 'img', '(00) 90000-0000', '1', '1');
 
 SET IDENTITY_INSERT [User] OFF;
-
 
 -----------------------------------------------------------------
 

@@ -9,6 +9,7 @@ using WinglyShop.Application.Carts;
 using WinglyShop.Application.Users.Delete;
 using WinglyShop.Application.Users.Get;
 using WinglyShop.Application.Users.GetById;
+using WinglyShop.Application.Users.SetAccess;
 using WinglyShop.Application.Users.Update;
 using WinglyShop.Application.Wishlist;
 using WinglyShop.Domain.Common.Enums.Account;
@@ -32,7 +33,7 @@ public class UsersController : ApiController
 
 	[HttpGet]
 	//[Authorize(Roles = nameof(RoleAccess.Admin))]
-	[AuthAccessLevel(RoleAccess.PremiumCustomer)]
+	[AuthAccessLevel(RoleAccess.Manager)]
 	public async Task<IActionResult> GetAllUsers(CancellationToken cancellationToken)
 	{
 		// Creating the query
@@ -85,6 +86,23 @@ public class UsersController : ApiController
 	public async Task<IActionResult> DeleteUser([FromBody] DeleteUserRequest request, CancellationToken cancellationToken)
 	{
 		return Ok();
+	}
+
+	[HttpPut("AccessLevel")]
+	[AuthAccessLevel(RoleAccess.Admin)]
+	public async Task<IActionResult> SetUserAccess([FromBody] SetUserAccessLevelRequest request, CancellationToken cancellationToken)
+	{
+		// Creating the command
+		var command = new SetUserAccessLevelCommand(request.UserId, request.AccessLevel);
+
+		var userRequest = await _dispatcher.Send<SetUserAccessLevelCommand, bool>(command, cancellationToken);
+
+		if (userRequest is { IsFailure: true })
+		{
+			return BadRequest(userRequest.Error);
+		}
+
+		return Ok(Result.Success(userRequest.Value));
 	}
 
 	[HttpPost("AddProductCart")]
