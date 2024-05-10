@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WinglyShop.API.Abstractions;
+using WinglyShop.API.Abstractions.Auth;
+using WinglyShop.API.Attributes;
 using WinglyShop.Application.Abstractions.Data;
 using WinglyShop.Application.Abstractions.Dispatcher;
 using WinglyShop.Application.Carts;
@@ -19,17 +21,18 @@ namespace WinglyShop.API.Controllers;
 [Route("api/[controller]")]
 public class UsersController : ApiController
 {
-    public UsersController(
-		IDatabaseContext databaseContext, 
-		IDbConnection dbConnection, 
-		IDispatcher dispatcher, 
-		IHttpContextAccessor contextAccessor)
-		: base(databaseContext, dbConnection, dispatcher, contextAccessor)
+	public UsersController(
+		IDatabaseContext databaseContext,
+		IDbConnection dbConnection,
+		IDispatcher dispatcher,
+		IUserAccessor userAccessor)
+		: base(databaseContext, dbConnection, dispatcher, userAccessor)
 	{
-    }
+	}
 
 	[HttpGet]
-	[Authorize(Roles = nameof(RoleAccess.Admin))]
+	//[Authorize(Roles = nameof(RoleAccess.Admin))]
+	[AuthAccessLevel(RoleAccess.PremiumCustomer)]
 	public async Task<IActionResult> GetAllUsers(CancellationToken cancellationToken)
 	{
 		// Creating the query
@@ -41,6 +44,10 @@ public class UsersController : ApiController
 		// Validate the response
 		if (userRequest is { IsFailure: true })
 			return BadRequest(userRequest.Error);
+
+		//-- TESTE --// (Remover)
+		var test = _userAccessor.GetCurrentUsername();
+		//-- TESTE --//
 
 		return Ok(Result.Success(userRequest.Value));
 	}

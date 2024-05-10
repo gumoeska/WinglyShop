@@ -19,28 +19,17 @@ public class TokenService : ITokenService
 
     public string GenerateToken(LoginUserResultDTO userData)
 	{
-		//var claims = new List<Claim>()
-		//	{
-		//		new(nameof(UsuarioLoginDto.UserName), userAut.UserName),
-		//		new(nameof(Variaveis.Valores.IdEntidade), userAut.IdEntidadeGr3bDataBase.ToString()),
-		//		new(ClaimTypes.Name, UtilsDominio.RemoverAcentos(userAut.DescUsuario)),
-		//		new(ClaimTypes.Sid, userAut.CodUsuario.ToString()),
-		//		new(nameof(SignalRName.Group), userAut.DescEntidade.ToUpper()),
-		//		new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-		//	};
-
 		List<Claim> claims = new List<Claim>
 		{
-			new Claim(ClaimTypes.UserData, userData.User.Login),
+			new Claim(ClaimTypes.NameIdentifier, userData.User.Login),
 			new Claim(ClaimTypes.Name, userData.User.Name),
 			new Claim(ClaimTypes.Surname, userData.User.Surname),
+			new Claim("RoleId", userData.User.IdRole.ToString()),
 			new Claim(ClaimTypes.Role, userData.Role.Access.GetDisplayName()),
 			new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
 		};
 
-		var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey.Key));
-
-		var keyTest = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["SecretKey:Token"]));
+		var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["SecretKey:Token"]));
 
 		var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
@@ -52,5 +41,12 @@ public class TokenService : ITokenService
 		var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
 		return jwt;
+	}
+
+	public string GetToken(IHttpContextAccessor contextAccessor)
+	{
+		var token = contextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+
+		return token;
 	}
 }

@@ -22,8 +22,8 @@ public class AuthController : ApiController
 		IDbConnection dbConnection, 
 		IDispatcher dispatcher, 
 		ITokenService tokenService,
-		IHttpContextAccessor contextAccessor)
-		: base(databaseContext, dbConnection, dispatcher, contextAccessor)
+		IUserAccessor userAccessor)
+		: base(databaseContext, dbConnection, dispatcher, userAccessor)
 	{
 		_tokenService = tokenService;
 	}

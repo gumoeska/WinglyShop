@@ -8,6 +8,7 @@ using System.Text;
 using System.Transactions;
 using WinglyShop.API.Abstractions.Auth;
 using WinglyShop.API.Configurations;
+using WinglyShop.API.Middlewares.Authorization;
 using WinglyShop.API.Services.Auth;
 using WinglyShop.Application;
 using WinglyShop.Application.Abstractions.Data;
@@ -16,7 +17,7 @@ using WinglyShop.Infrastructure;
 
 namespace WinglyShop.API
 {
-	public class Program
+    public class Program
 	{
 		public static void Main(string[] args)
 		{
@@ -62,18 +63,15 @@ namespace WinglyShop.API
 				options.EnableSensitiveDataLogging(true);
 			});
 
-			builder.Services.AddScoped<IDatabaseContext, DatabaseContext>(); // Database
-
-			// Dapper
-			builder.Services.AddScoped<IDbConnection, DbConnection>(); // Database
-
+			builder.Services.AddScoped<IDatabaseContext, DatabaseContext>(); // Database (EF Core)
+			builder.Services.AddScoped<IDbConnection, DbConnection>(); // Database (Dapper)
 			builder.Services.AddScoped<IDispatcher, Dispatcher>(); // Dispatcher
 			builder.Services.AddScoped<ITokenService, TokenService>(); // Token Service
+			builder.Services.AddScoped<IUserAccessor, UserAccessor>(); // User Data
+
 			builder.Services.AddHandlersFromAssembly(typeof(AssemblyReference).Assembly); // Scan the Handlers
 
 			// Authentication
-			var secretKey = Encoding.ASCII.GetBytes(SecretKey.Key);
-
 			builder.Services.AddAuthentication(x =>
 			{
 				x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -86,28 +84,12 @@ namespace WinglyShop.API
 				x.TokenValidationParameters = new TokenValidationParameters
 				{
 					ValidateIssuerSigningKey = true,
-					IssuerSigningKey = new SymmetricSecurityKey(secretKey),
+					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["SecretKey:Token"])),
 					ValidateIssuer = false,
 					ValidateAudience = false,
 					ClockSkew = TimeSpan.Zero
 				};
 			});
-
-			//services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-			//	.AddJwtBearer(options =>
-			//	{
-			//		options.RequireHttpsMetadata = false;
-			//		options.SaveToken = true;
-			//		options.TokenValidationParameters = new TokenValidationParameters
-			//		{
-			//			ValidateIssuer = false,
-			//			ValidateAudience = false,
-			//			//ValidateLifetime = true,
-			//			ValidateIssuerSigningKey = true,
-			//			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
-			//			ClockSkew = TimeSpan.Zero
-			//		};
-			//	});
 
 			builder.Services.AddHttpContextAccessor();
 
@@ -122,6 +104,8 @@ namespace WinglyShop.API
 			app.UseCors("AllowSpecificOrigin");
 
 			app.UseHttpsRedirection();
+
+			app.UseMiddleware<AuthorizationMiddleware>();
 
 			app.UseAuthorization();
 

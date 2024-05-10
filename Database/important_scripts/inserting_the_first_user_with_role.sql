@@ -4,9 +4,17 @@
 
 SET IDENTITY_INSERT [Roles] ON;
 
-
+-- Admin --
 INSERT INTO [Roles] ([id], [access], [isActive])
-VALUES (1, 100, '1');
+VALUES (1, 100, 1);
+
+-- Customer --
+INSERT INTO [Roles] ([id], [access], [isActive])
+VALUES (2, 0, 1);
+
+-- Premium Customer --
+INSERT INTO [Roles] ([id], [access], [isActive])
+VALUES (3, 1, 1);
 
 SET IDENTITY_INSERT [Roles] OFF;
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WinglyShop.API.Abstractions;
+using WinglyShop.API.Abstractions.Auth;
 using WinglyShop.Application.Abstractions.Data;
 using WinglyShop.Application.Abstractions.Dispatcher;
 using WinglyShop.Application.Orders.DeleteOrder;
@@ -12,8 +13,12 @@ namespace WinglyShop.API.Controllers;
 [Route("api/[controller]")]
 public class OrdersController : ApiController
 {
-    public OrdersController(IDatabaseContext databaseContext, IDbConnection dbConnection, IDispatcher dispatcher, IHttpContextAccessor contextAccessor)
-		: base(databaseContext, dbConnection, dispatcher, contextAccessor)
+    public OrdersController(
+		IDatabaseContext databaseContext, 
+		IDbConnection dbConnection, 
+		IDispatcher dispatcher,
+		IUserAccessor userAccessor)
+		: base(databaseContext, dbConnection, dispatcher, userAccessor)
 	{
     }
 

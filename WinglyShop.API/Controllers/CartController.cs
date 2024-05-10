@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WinglyShop.API.Abstractions;
+using WinglyShop.API.Abstractions.Auth;
 using WinglyShop.Application.Abstractions.Data;
 using WinglyShop.Application.Abstractions.Dispatcher;
 using WinglyShop.Application.Carts;
@@ -14,8 +15,8 @@ public class CartController : ApiController
 		IDatabaseContext databaseContext, 
 		IDbConnection dbConnection, 
 		IDispatcher dispatcher, 
-		IHttpContextAccessor contextAccessor)
-		: base(databaseContext, dbConnection, dispatcher, contextAccessor)
+		IUserAccessor userAccessor)
+		: base(databaseContext, dbConnection, dispatcher, userAccessor)
 	{
     }
 

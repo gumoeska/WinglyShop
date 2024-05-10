@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Transactions;
 using WinglyShop.Application.Abstractions.Data;
 using WinglyShop.Application.Abstractions.Messaging;
+using WinglyShop.Domain.Common.Enums.Account;
 using WinglyShop.Domain.Entities.Users;
 using WinglyShop.Shared;
 
@@ -19,7 +20,6 @@ internal sealed class RegisterCommandHandler : ICommandHandler<RegisterCommand, 
         _dbConnection = dbConnection;
     }
 
-	// Temporary EF Implementation
 	public async Task<Result<bool>> Handle(RegisterCommand command, CancellationToken cancellationToken)
 	{
 		// Validate
@@ -29,16 +29,25 @@ internal sealed class RegisterCommandHandler : ICommandHandler<RegisterCommand, 
 		// Creating a new User based on UserDTO
 		var user = new User(command.User);
 
-		// Modifying some client-inaccessible properties (Temp)
-		user.IdRole = 1;
-		user.IsActive = true;
-
 		// Inserting data
 		try
 		{
 			// Checking if the user already exists
 			var userExists = await _context.Users
 				.AnyAsync(x => x.Login == user.Login);
+
+			// Setting the user role
+			var customerRole = await _context.Roles
+				.Where(x => x.Access == RoleAccess.Customer)
+				.FirstOrDefaultAsync();
+
+            if (customerRole is { Id: > 0 })
+            {
+                user.IdRole = customerRole.Id;
+            }
+
+			// Activating the user
+			user.IsActive = true;
 
 			// Validate if user already exists
 			if (userExists is true)
