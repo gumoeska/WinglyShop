@@ -8,8 +8,18 @@ namespace WinglyShop.Domain.Entities.Products;
 
 public partial class Product
 {
+    public Product()
+    {
+    }
+
     public Product(ProductDTO product)
     {
+        Code = product.Code;
+        Description = product.Description;
+        Price = product.Price;
+        HasStock = product.HasStock;
+        IsActive = product.IsActive;
+        IdCategory = product.CategoryId;
     }
 
     public int Id { get; set; }

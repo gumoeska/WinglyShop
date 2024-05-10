@@ -1,4 +1,5 @@
-﻿using WinglyShop.Application.Abstractions.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using WinglyShop.Application.Abstractions.Data;
 using WinglyShop.Application.Abstractions.Messaging;
 using WinglyShop.Domain.Entities.Products;
 using WinglyShop.Shared;
@@ -14,7 +15,7 @@ internal sealed class CreateProductCommandHandler : ICommandHandler<CreateProduc
         _context = context;
     }
 
-    public Task<Result<bool>> Handle(CreateProductCommand command, CancellationToken cancellationToken)
+    public async Task<Result<bool>> Handle(CreateProductCommand command, CancellationToken cancellationToken)
 	{
         if (command is null)
         {
@@ -25,11 +26,14 @@ internal sealed class CreateProductCommandHandler : ICommandHandler<CreateProduc
 
         try
         {
-
+            await _context.Products.AddAsync(product);
+            await _context.SaveChangesAsync();
         }
         catch (Exception ex)
         {
+            return Result.Failure<bool>(new Error("Error", "An error occured."));
+		}
 
-        }
+        return Result.Success(true);
 	}
 }

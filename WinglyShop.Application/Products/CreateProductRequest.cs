@@ -1,4 +1,4 @@
-﻿using WinglyShop.Application.Products.DTOs;
+﻿using WinglyShop.Domain.Common.DTOs.Products;
 
 namespace WinglyShop.Application.Products;
 

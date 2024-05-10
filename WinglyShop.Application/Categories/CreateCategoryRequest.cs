@@ -1,4 +1,4 @@
-﻿using WinglyShop.Application.Categories.DTOs;
+﻿using WinglyShop.Domain.Common.DTOs.Categories;
 
 namespace WinglyShop.Application.Categories;
 

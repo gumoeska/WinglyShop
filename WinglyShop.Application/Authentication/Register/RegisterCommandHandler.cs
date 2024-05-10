@@ -41,10 +41,10 @@ internal sealed class RegisterCommandHandler : ICommandHandler<RegisterCommand, 
 				.Where(x => x.Access == RoleAccess.Customer)
 				.FirstOrDefaultAsync();
 
-            if (customerRole is { Id: > 0 })
-            {
-                user.IdRole = customerRole.Id;
-            }
+			if (customerRole is { Id: > 0 })
+			{
+				user.IdRole = customerRole.Id;
+			}
 
 			// Activating the user
 			user.IsActive = true;
