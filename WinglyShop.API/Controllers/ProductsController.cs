@@ -25,6 +25,6 @@ public class ProductsController : ApiController
 
 	public async Task<IActionResult> CreateProduct(CreateProductRequest request, CancellationToken cancellationToken)
 	{
-
+		// Creating the command
 	}
 }

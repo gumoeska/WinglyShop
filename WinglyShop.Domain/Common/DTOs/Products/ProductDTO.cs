@@ -1,4 +1,4 @@
-﻿namespace WinglyShop.Application.Products.DTOs;
+﻿namespace WinglyShop.Domain.Common.DTOs.Products;
 
 public sealed class ProductDTO
 {

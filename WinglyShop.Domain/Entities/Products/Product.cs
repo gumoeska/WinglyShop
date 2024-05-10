@@ -1,4 +1,6 @@
-﻿using WinglyShop.Domain.Entities.CartDetails;
+﻿using System.Security.Cryptography.X509Certificates;
+using WinglyShop.Domain.Common.DTOs.Products;
+using WinglyShop.Domain.Entities.CartDetails;
 using WinglyShop.Domain.Entities.Categories;
 using WinglyShop.Domain.Entities.OrderDetails;
 
@@ -6,6 +8,10 @@ namespace WinglyShop.Domain.Entities.Products;
 
 public partial class Product
 {
+    public Product(ProductDTO product)
+    {
+    }
+
     public int Id { get; set; }
 
     public string? Code { get; set; }

@@ -3,6 +3,7 @@ using WinglyShop.API.Abstractions;
 using WinglyShop.API.Abstractions.Auth;
 using WinglyShop.Application.Abstractions.Data;
 using WinglyShop.Application.Abstractions.Dispatcher;
+using WinglyShop.Application.Categories;
 using WinglyShop.Domain.Entities.Products;
 
 namespace WinglyShop.API.Controllers;
@@ -21,6 +22,6 @@ public class CategoriesController : ApiController
 
 	public async Task<IActionResult> CreateCategory(CreateCategoryRequest request, CancellationToken cancellationToken)
 	{
-
+		// Create the Category Command
 	}
 }
