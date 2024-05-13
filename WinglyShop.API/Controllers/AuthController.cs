@@ -7,6 +7,7 @@ using WinglyShop.Application.Abstractions.Dispatcher;
 using WinglyShop.Application.Authentication.DTOs;
 using WinglyShop.Application.Authentication.Login;
 using WinglyShop.Application.Authentication.Register;
+using WinglyShop.Domain.Common.DTOs.Users;
 using WinglyShop.Domain.Entities.Users;
 using WinglyShop.Shared;
 
@@ -59,8 +60,18 @@ public class AuthController : ApiController
 	[HttpPost("Register")]
 	public async Task<IActionResult> RegisterAccount([FromBody] RegisterRequest request, CancellationToken cancellationToken)
 	{
+		// Building the DTO
+		var userDto = new UserDTO(
+			request.Login, 
+			request.Email, 
+			request.Password, 
+			request.Name, 
+			request.Surname, 
+			request.Image, 
+			request.Phone);
+
 		// Creating the command
-		var command = new RegisterCommand(request.User);
+		var command = new RegisterCommand(userDto);
 
 		// Sending the request to the handler
 		var userRequest = await _dispatcher.Send<RegisterCommand, bool>(command, cancellationToken);
