@@ -46,10 +46,6 @@ public class UsersController : ApiController
 		if (userRequest is { IsFailure: true })
 			return BadRequest(userRequest.Error);
 
-		//-- TESTE --// (Remover)
-		var test = _userAccessor.GetCurrentUsername();
-		//-- TESTE --//
-
 		return Ok(Result.Success(userRequest.Value));
 	}
 

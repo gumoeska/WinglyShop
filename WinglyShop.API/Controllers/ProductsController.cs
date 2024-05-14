@@ -37,4 +37,17 @@ public class ProductsController : ApiController
 
 		return Ok(Result.Success(userRequest.Value));
 	}
+
+	[HttpPost("{productId}/add")]
+	public async Task<IActionResult> AddProductToCart([FromBody] CreateProductRequest request, CancellationToken cancellationToken)
+	{
+		// receber o id do produto e o usuário da requisição
+		return Ok();
+	}
+
+	[HttpPost("{productId}/remove")]
+	public async Task<IActionResult> RemoveProductFromCart(CreateProductRequest request, CancellationToken cancellationToken)
+	{
+		return Ok();
+	}
 }

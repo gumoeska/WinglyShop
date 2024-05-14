@@ -2,10 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using WinglyShop.API.Abstractions;
 using WinglyShop.API.Abstractions.Auth;
+using WinglyShop.API.Attributes;
 using WinglyShop.Application.Abstractions.Data;
 using WinglyShop.Application.Abstractions.Dispatcher;
 using WinglyShop.Application.Authentication.DTOs;
 using WinglyShop.Application.Authentication.Login;
+using WinglyShop.Application.Authentication.Profile;
+using WinglyShop.Application.Authentication.Profile.Response;
 using WinglyShop.Application.Authentication.Register;
 using WinglyShop.Domain.Common.DTOs.Users;
 using WinglyShop.Domain.Entities.Users;
@@ -30,7 +33,7 @@ public class AuthController : ApiController
 	}
 
 	[AllowAnonymous]
-	[HttpPost("Login")]
+	[HttpPost("login")]
 	public async Task<IActionResult> LoginAccount([FromBody] LoginRequest request, CancellationToken cancellationToken)
 	{
 		// Creating the command
@@ -57,7 +60,7 @@ public class AuthController : ApiController
 	}
 
 	[AllowAnonymous]
-	[HttpPost("Register")]
+	[HttpPost("register")]
 	public async Task<IActionResult> RegisterAccount([FromBody] RegisterRequest request, CancellationToken cancellationToken)
 	{
 		// Building the DTO
@@ -88,5 +91,31 @@ public class AuthController : ApiController
 			return BadRequest("An error occoured.");
 
 		return Ok(Result.Success<bool>(true));
+	}
+
+	[Authorize]
+	[HttpGet("profile")]
+	public async Task<IActionResult> GetAuthenticatedProfile(CancellationToken cancellationToken)
+	{
+		// Getting the username
+		var username = _userAccessor.GetCurrentUsername();
+
+		// Validate if the username (token) is null
+		if (username is null)
+		{
+			return BadRequest("You are not logged in.");
+		}
+
+		// Creating the query
+		var query = new GetAuthenticatedProfileQuery(username);
+
+		// Sending the request to the handler
+		var userRequest = await _dispatcher.Query<GetAuthenticatedProfileQuery, UserDataResponse>(query, cancellationToken);
+
+		// Validate the request
+		if (userRequest is { IsFailure: true })
+			return BadRequest(userRequest.Error);
+
+		return Ok(Result.Success(userRequest.Value));
 	}
 }
