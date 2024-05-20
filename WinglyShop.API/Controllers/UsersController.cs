@@ -84,7 +84,7 @@ public class UsersController : ApiController
 		return Ok();
 	}
 
-	[HttpPut("AccessLevel")]
+	[HttpPatch("AccessLevel")]
 	[AuthAccessLevel(RoleAccess.Admin)]
 	public async Task<IActionResult> SetUserAccess([FromBody] SetUserAccessLevelRequest request, CancellationToken cancellationToken)
 	{
@@ -99,18 +99,6 @@ public class UsersController : ApiController
 		}
 
 		return Ok(Result.Success(userRequest.Value));
-	}
-
-	[HttpPost("AddProductCart")]
-	public async Task<IActionResult> AddProductCart([FromBody] AddProductCartRequest request, CancellationToken cancellationToken)
-	{
-		return Ok();
-	}
-
-	[HttpPost("AddProductWishlist")]
-	public async Task<IActionResult> AddProductWishlist([FromBody] AddProductWishlistRequest request, CancellationToken cancellationToken)
-	{
-		return Ok();
 	}
 }
 

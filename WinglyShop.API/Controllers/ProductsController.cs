@@ -7,6 +7,11 @@ using WinglyShop.Application.Products;
 using WinglyShop.API.Attributes;
 using WinglyShop.Domain.Common.Enums.Account;
 using WinglyShop.Shared;
+using WinglyShop.Application.Carts;
+using WinglyShop.Application.Wishlist;
+using Microsoft.AspNetCore.Authorization;
+using WinglyShop.Application.Products.Get;
+using WinglyShop.Domain.Entities.Products;
 
 namespace WinglyShop.API.Controllers;
 
@@ -20,6 +25,22 @@ public class ProductsController : ApiController
 		IUserAccessor userAccessor)
 		: base(databaseContext, dbConnection, dispatcher, userAccessor)
 	{
+	}
+
+	[AllowAnonymous]
+	[HttpGet]
+	public async Task<IActionResult> GetProducts(CancellationToken cancellationToken)
+	{
+		var query = new GetProductListQuery();
+
+		var userRequest = await _dispatcher.Query<GetProductListQuery, List<Product>>(query, cancellationToken);
+
+		if (userRequest is { IsFailure: true })
+		{
+			return BadRequest(userRequest.Error);
+		}
+
+		return Ok(Result.Success(userRequest.Value));
 	}
 
 	[AuthAccessLevel(RoleAccess.GeneralManager)]
@@ -38,16 +59,28 @@ public class ProductsController : ApiController
 		return Ok(Result.Success(userRequest.Value));
 	}
 
-	[HttpPost("{productId}/add")]
-	public async Task<IActionResult> AddProductToCart([FromBody] CreateProductRequest request, CancellationToken cancellationToken)
+	[HttpPost("cart/{productId}/add")]
+	public async Task<IActionResult> UserAddProductToCart([FromBody] CreateProductRequest request, CancellationToken cancellationToken)
 	{
 		// receber o id do produto e o usuário da requisição
 		return Ok();
 	}
 
-	[HttpPost("{productId}/remove")]
-	public async Task<IActionResult> RemoveProductFromCart(CreateProductRequest request, CancellationToken cancellationToken)
+	[HttpDelete("cart/{productId}/remove")]
+	public async Task<IActionResult> UserRemoveProductFromCart(CreateProductRequest request, CancellationToken cancellationToken)
 	{
 		return Ok();
 	}
+
+    [HttpPost("wishlist/{productId}/add")]
+    public async Task<IActionResult> UserAddProductToWishlist([FromBody] AddProductWishlistRequest request, CancellationToken cancellationToken)
+    {
+        return Ok();
+    }
+
+    [HttpDelete("wishlist/{productId}/remove")]
+    public async Task<IActionResult> UserRemoveProductFromWishlist([FromBody] AddProductWishlistRequest request, CancellationToken cancellationToken)
+    {
+        return Ok();
+    }
 }
