@@ -12,6 +12,8 @@ using WinglyShop.Application.Wishlist;
 using Microsoft.AspNetCore.Authorization;
 using WinglyShop.Application.Products.Get;
 using WinglyShop.Domain.Entities.Products;
+using WinglyShop.Domain.Common.DTOs.Products;
+using WinglyShop.Domain.Entities.Categories;
 
 namespace WinglyShop.API.Controllers;
 
@@ -40,14 +42,25 @@ public class ProductsController : ApiController
 			return BadRequest(userRequest.Error);
 		}
 
-		return Ok(Result.Success(userRequest.Value));
+		//return Ok(Result.Success(userRequest.Value));
+		return Ok(userRequest.Value);
 	}
 
 	[AuthAccessLevel(RoleAccess.GeneralManager)]
 	[HttpPost("Create")]
 	public async Task<IActionResult> CreateProduct(CreateProductRequest request, CancellationToken cancellationToken)
 	{
-		var command = new CreateProductCommand(request.Product);
+		var productDto = new ProductDTO
+		{
+            Code = request.Code,
+			Description = request.Description,
+			Price = request.Price,
+			HasStock = request.HasStock,
+			IsActive = request.IsActive,
+			CategoryId = request.CategoryId
+        };
+
+		var command = new CreateProductCommand(productDto);
 
 		var userRequest = await _dispatcher.Send<CreateProductCommand, bool>(command, cancellationToken);
 
@@ -56,7 +69,8 @@ public class ProductsController : ApiController
 			return BadRequest(userRequest.Error);
 		}
 
-		return Ok(Result.Success(userRequest.Value));
+		//return Ok(Result.Success(userRequest.Value));
+		return Ok(userRequest.Value);
 	}
 
 	[HttpPost("cart/{productId}/add")]

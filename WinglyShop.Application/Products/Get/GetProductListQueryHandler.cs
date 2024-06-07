@@ -20,11 +20,34 @@ internal sealed class GetProductListQueryHandler : IQueryHandler<GetProductListQ
     {
         // Todo: implementar paginação (trazer valores da Query) {skip - take}
 
-        var productList = await _context.Products.ToListAsync();
+        // Product List
+        var productList = await _context.Products.AsNoTracking().ToListAsync();
+
+        // Getting the Id's of registered products
+        var listCategoryId = productList
+            .Distinct()
+            .Where(x => x.IdCategory > 0)
+            .Select(x => x.IdCategory)
+            .ToList();
+
+        // Finding the Categories by id
+        var categoriesList = await _context.Categories
+            .AsNoTracking()
+            .Where(x => listCategoryId.Contains(x.Id))
+            .ToListAsync();
+
+        // Setting the descriptions
+        productList.ForEach(item =>
+        {
+            item.CategoryDescription = categoriesList
+                .Where(x => x.Id == item.IdCategory)
+                .Select(x => x.Description)
+                .FirstOrDefault();
+        });
 
         if (productList.IsNullOrEmpty())
         {
-            return Result.Failure<List<Product>>(new Error("Error", "An error occured"));
+            return Result.Failure<List<Product>>(new Error("Error", "Ocorreu um erro."));
         }
 
         return Result.Success(productList);

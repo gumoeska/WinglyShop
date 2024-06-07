@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Security.Cryptography.X509Certificates;
 using WinglyShop.Domain.Common.DTOs.Products;
 using WinglyShop.Domain.Entities.CartDetails;
 using WinglyShop.Domain.Entities.Categories;
@@ -35,6 +36,9 @@ public partial class Product
     public bool? IsActive { get; set; }
 
     public int? IdCategory { get; set; }
+
+    [NotMapped]
+    public string? CategoryDescription { get; set; }
 
     public virtual ICollection<CartDetail> CartDetails { get; set; } = new List<CartDetail>();
 
