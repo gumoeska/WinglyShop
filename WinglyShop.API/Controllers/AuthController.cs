@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 using WinglyShop.API.Abstractions;
 using WinglyShop.API.Abstractions.Auth;
 using WinglyShop.API.Attributes;
+using WinglyShop.API.Extensions.Authorization;
 using WinglyShop.Application.Abstractions.Data;
 using WinglyShop.Application.Abstractions.Dispatcher;
 using WinglyShop.Application.Authentication.DTOs;
@@ -36,8 +38,8 @@ public class AuthController : ApiController
 	[HttpPost("login")]
 	public async Task<IActionResult> LoginAccount([FromBody] LoginRequest request, CancellationToken cancellationToken)
 	{
-		// Creating the command
-		var command = new LoginCommand(request.Login, request.Password);
+        // Creating the command
+        var command = new LoginCommand(request.Login, request.Password);
 
 		// Sending the request to the handler
 		var userRequest = await _dispatcher.Send<LoginCommand, LoginUserResultDTO>(command, cancellationToken);
@@ -56,7 +58,16 @@ public class AuthController : ApiController
 		// Generating the token
 		var token = _tokenService.GenerateToken(userResponse);
 
-		return Ok(Result.Success<string>(token));
+		// Building the response
+		var responseModel = new AuthorizationModelResponse
+		{
+            Id = userResponse.User.Id, 
+			Username = userResponse.User.Login, 
+			AuthData = token
+        };
+
+		//return Ok(Result.Success(responseModel));
+		return Ok(responseModel);
 	}
 
 	[AllowAnonymous]
@@ -90,7 +101,8 @@ public class AuthController : ApiController
 		if (userResponse is false)
 			return BadRequest("An error occoured.");
 
-		return Ok(Result.Success<bool>(true));
+		//return Ok(Result.Success<bool>(true));
+		return Ok(true);
 	}
 
 	[Authorize]
@@ -116,6 +128,7 @@ public class AuthController : ApiController
 		if (userRequest is { IsFailure: true })
 			return BadRequest(userRequest.Error);
 
-		return Ok(Result.Success(userRequest.Value));
+		//return Ok(Result.Success(userRequest.Value));
+		return Ok(userRequest.Value);
 	}
 }

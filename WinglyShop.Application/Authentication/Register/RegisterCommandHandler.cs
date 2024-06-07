@@ -46,6 +46,9 @@ internal sealed class RegisterCommandHandler : ICommandHandler<RegisterCommand, 
 				user.IdRole = customerRole.Id;
 			}
 
+			// Setting the name as the login
+			user.Name = user.Login;
+
 			// Activating the user
 			user.IsActive = true;
 

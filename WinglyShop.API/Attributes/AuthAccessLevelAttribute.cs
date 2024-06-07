@@ -31,7 +31,8 @@ public class AuthAccessLevelAttribute : AuthorizeAttribute, IAuthorizationFilter
 
 		if (!AuthorizationLevelExtension.HasAccess(userAccessLevel, _requiredAccessLevel))
 		{
-			context.Result = new ForbidResult();
+			//context.Result = new ForbidResult();
+			context.Result = new UnauthorizedResult();
 			return;
 		}
 	}

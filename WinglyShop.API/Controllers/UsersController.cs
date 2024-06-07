@@ -46,7 +46,8 @@ public class UsersController : ApiController
 		if (userRequest is { IsFailure: true })
 			return BadRequest(userRequest.Error);
 
-		return Ok(Result.Success(userRequest.Value));
+		//return Ok(Result.Success(userRequest.Value));
+		return Ok(userRequest.Value);
 	}
 
 	[HttpGet("{id}")]

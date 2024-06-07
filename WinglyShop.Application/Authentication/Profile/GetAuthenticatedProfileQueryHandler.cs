@@ -1,7 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using WinglyShop.Application.Abstractions.Data;
 using WinglyShop.Application.Abstractions.Messaging;
 using WinglyShop.Application.Authentication.Profile.Response;
+using WinglyShop.Application.Extensions;
+using WinglyShop.Domain.Common.Enums.Account;
 using WinglyShop.Shared;
 
 namespace WinglyShop.Application.Authentication.Profile;
@@ -34,12 +37,19 @@ internal sealed class GetAuthenticatedProfileQueryHandler : IQueryHandler<GetAut
             return Result.Failure<UserDataResponse>(new Error("Error", "User data not found."));
         }
 
+        // Get the user role
+        var userRoleName = await _context.Roles
+            .Where(x => x.Id == user.IdRole)
+            .Select(x => x.Access)
+            .FirstOrDefaultAsync();
+
         // Building the response
         var userResponse = new UserDataResponse(
             user.Name, 
             user.Surname, 
             user.Email, 
-            user.Image);
+            user.Image,
+            userRoleName.DescriptionAttr());
 
 		return Result.Success(userResponse);
 	}
