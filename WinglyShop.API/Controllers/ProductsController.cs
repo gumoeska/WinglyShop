@@ -14,6 +14,9 @@ using WinglyShop.Application.Products.Get;
 using WinglyShop.Domain.Entities.Products;
 using WinglyShop.Domain.Common.DTOs.Products;
 using WinglyShop.Domain.Entities.Categories;
+using WinglyShop.Application.Products.GetById;
+using WinglyShop.Application.Products.Update;
+using WinglyShop.Application.Products.Delete;
 
 namespace WinglyShop.API.Controllers;
 
@@ -46,7 +49,24 @@ public class ProductsController : ApiController
 		return Ok(userRequest.Value);
 	}
 
-	[AuthAccessLevel(RoleAccess.GeneralManager)]
+    [AllowAnonymous]
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetProductById(int id, CancellationToken cancellationToken)
+    {
+        var query = new GetProductByIdQuery(id);
+
+        var userRequest = await _dispatcher.Query<GetProductByIdQuery, Product>(query, cancellationToken);
+
+        if (userRequest is { IsFailure: true })
+        {
+            return BadRequest(userRequest.Error);
+        }
+
+        //return Ok(Result.Success(userRequest.Value));
+        return Ok(userRequest.Value);
+    }
+
+    [AuthAccessLevel(RoleAccess.GeneralManager)]
 	[HttpPost("Create")]
 	public async Task<IActionResult> CreateProduct(CreateProductRequest request, CancellationToken cancellationToken)
 	{
@@ -57,7 +77,7 @@ public class ProductsController : ApiController
 			Price = request.Price,
 			HasStock = request.HasStock,
 			IsActive = request.IsActive,
-			CategoryId = request.CategoryId
+			IdCategory = request.IdCategory
         };
 
 		var command = new CreateProductCommand(productDto);
@@ -73,7 +93,52 @@ public class ProductsController : ApiController
 		return Ok(userRequest.Value);
 	}
 
-	[HttpPost("cart/{productId}/add")]
+    [AuthAccessLevel(RoleAccess.GeneralManager)]
+    [HttpPost("Update")]
+    public async Task<IActionResult> UpdateProduct(UpdateProductRequest request, CancellationToken cancellationToken)
+    {
+        var productDto = new ProductDTO
+        {
+			Id = request.Id,
+            Code = request.Code,
+            Description = request.Description,
+            Price = request.Price,
+            HasStock = request.HasStock,
+            IsActive = request.IsActive,
+            IdCategory = request.IdCategory
+        };
+
+        var command = new UpdateProductCommand(productDto);
+
+        var userRequest = await _dispatcher.Send<UpdateProductCommand, bool>(command, cancellationToken);
+
+        if (userRequest is { IsFailure: true })
+        {
+            return BadRequest(userRequest.Error);
+        }
+
+        //return Ok(Result.Success(userRequest.Value));
+        return Ok(userRequest.Value);
+    }
+
+    [AuthAccessLevel(RoleAccess.GeneralManager)]
+    [HttpDelete("Delete/{id}")]
+    public async Task<IActionResult> DeleteProduct(int id, CancellationToken cancellationToken)
+    {
+        var command = new DeleteProductCommand(id);
+
+        var userRequest = await _dispatcher.Send<DeleteProductCommand, bool>(command, cancellationToken);
+
+        if (userRequest is { IsFailure: true })
+        {
+            return BadRequest(userRequest.Error);
+        }
+
+        //return Ok(Result.Success(userRequest.Value));
+        return Ok(userRequest.Value);
+    }
+
+    [HttpPost("cart/{productId}/add")]
 	public async Task<IActionResult> UserAddProductToCart([FromBody] CreateProductRequest request, CancellationToken cancellationToken)
 	{
 		// receber o id do produto e o usuário da requisição

@@ -15,12 +15,13 @@ public partial class Product
 
     public Product(ProductDTO product)
     {
+        Id = product.Id;
         Code = product.Code;
         Description = product.Description;
         Price = product.Price;
         HasStock = product.HasStock;
         IsActive = product.IsActive;
-        IdCategory = product.CategoryId;
+        IdCategory = product.IdCategory;
     }
 
     public int Id { get; set; }
