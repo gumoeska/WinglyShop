@@ -1,6 +1,7 @@
-﻿namespace WinglyShop.Application.Products;
+﻿namespace WinglyShop.Application.Products.Update;
 
-public sealed record CreateProductRequest(
+public sealed record UpdateProductRequest(
+    int Id,
     string Code,
     string Description,
     decimal Price,
