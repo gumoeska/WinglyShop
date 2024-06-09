@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using WinglyShop.Application.Abstractions.Data;
 using WinglyShop.Application.Abstractions.Messaging;
 using WinglyShop.Shared;
@@ -26,6 +27,17 @@ internal sealed class DeleteCategoryCommandHandler : ICommandHandler<DeleteCateg
         if (category is null)
         {
             return Result.Failure<bool>(new Error("Error", "A categoria não foi encontrada."));
+        }
+
+        // Check if exist Products with the category
+        var productsWithCategory = await _context.Products
+            .AsNoTracking()
+            .Where(x => x.IdCategory == command.Id)
+            .ToListAsync();
+
+        if (!productsWithCategory.IsNullOrEmpty()) 
+        {
+            return Result.Failure<bool>(new Error("Error", "Existem produtos vinculados a esta categoria."));
         }
 
         try

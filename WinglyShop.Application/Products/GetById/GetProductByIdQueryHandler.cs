@@ -35,13 +35,16 @@ internal sealed class GetProductByIdQueryHandler : IQueryHandler<GetProductByIdQ
             .FirstOrDefaultAsync(x => x.Id == product.IdCategory.GetValueOrDefault(0));
 
         // Validate the Product/Category
-        if (product is null && category is null)
+        if (product is null)
         {
             return Result.Failure<Product>(new Error("Error", "Ocorreu um erro ao buscar o produto selecionado."));
         }
 
         // Setting the description
-        product.CategoryDescription = category.Description;
+        if (category is not null)
+        {
+            product.CategoryDescription = category.Description;
+        }
 
         return Result.Success(product);
     }
