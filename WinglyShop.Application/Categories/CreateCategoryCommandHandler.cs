@@ -21,7 +21,7 @@ internal sealed class CreateCategoryCommandHandler : ICommandHandler<CreateCateg
             throw new ArgumentNullException(nameof(command));
         }
 
-        var category = new Category().CreateCategory(command.Category);
+        var category = new Category(command.category);
 
         try
         {
