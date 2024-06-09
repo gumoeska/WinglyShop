@@ -11,6 +11,21 @@ public partial class Category
     {
     }
 
+    public Category(CategoryDTO categoryDto)
+    {
+        Code = categoryDto.Code;
+        Description = categoryDto.Description;
+        IsActive = categoryDto.IsActive;
+    }
+
+    public Category(int id, string code, string description, bool isActive)
+    {
+        Id = id;
+        Code = code;
+        Description = description;
+        IsActive = isActive;
+    }
+
     public int Id { get; set; }
 
     public string? Code { get; set; }

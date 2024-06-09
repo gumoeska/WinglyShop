@@ -99,7 +99,7 @@ public class ProductsController : ApiController
     {
         var productDto = new ProductDTO
         {
-			Id = request.Id,
+            Id = request.Id,
             Code = request.Code,
             Description = request.Description,
             Price = request.Price,

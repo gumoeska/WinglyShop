@@ -2,4 +2,7 @@
 
 namespace WinglyShop.Application.Categories;
 
-public sealed record CreateCategoryRequest(CategoryDTO Category);
+public sealed record CreateCategoryRequest(
+    string Code,
+    string Description,
+    bool IsActive);
