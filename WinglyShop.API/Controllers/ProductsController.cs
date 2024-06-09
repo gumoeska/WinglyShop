@@ -17,6 +17,7 @@ using WinglyShop.Domain.Entities.Categories;
 using WinglyShop.Application.Products.GetById;
 using WinglyShop.Application.Products.Update;
 using WinglyShop.Application.Products.Delete;
+using WinglyShop.Application.Products.UnlinkCategory;
 
 namespace WinglyShop.API.Controllers;
 
@@ -63,6 +64,22 @@ public class ProductsController : ApiController
         }
 
         //return Ok(Result.Success(userRequest.Value));
+        return Ok(userRequest.Value);
+    }
+
+    [AllowAnonymous]
+    [HttpGet("GetByCategory/{id}")]
+    public async Task<IActionResult> GetProductByCategoryId(int id, CancellationToken cancellationToken)
+    {
+        var query = new GetProductByCategoryIdQuery(id);
+
+        var userRequest = await _dispatcher.Query<GetProductByCategoryIdQuery, List<Product>>(query, cancellationToken);
+
+        if (userRequest is { IsFailure: true })
+        {
+            return BadRequest(userRequest.Error);
+        }
+
         return Ok(userRequest.Value);
     }
 
@@ -118,6 +135,22 @@ public class ProductsController : ApiController
         }
 
         //return Ok(Result.Success(userRequest.Value));
+        return Ok(userRequest.Value);
+    }
+
+    [AuthAccessLevel(RoleAccess.GeneralManager)]
+    [HttpPatch("UnlinkCategory/{id}")]
+    public async Task<IActionResult> UnlinkCategoryProducts(int id, CancellationToken cancellationToken)
+    {
+        var command = new UnlinkCategoryCommand(id);
+
+        var userRequest = await _dispatcher.Send<UnlinkCategoryCommand, bool>(command, cancellationToken);
+
+        if (userRequest is { IsFailure: true })
+        {
+            return BadRequest(userRequest.Error);
+        }
+
         return Ok(userRequest.Value);
     }
 

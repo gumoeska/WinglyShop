@@ -39,6 +39,11 @@ internal sealed class GetProductListQueryHandler : IQueryHandler<GetProductListQ
         // Setting the descriptions
         productList.ForEach(item =>
         {
+            if (item.IdCategory is null)
+            {
+                return;
+            }
+
             item.CategoryDescription = categoriesList
                 .Where(x => x.Id == item.IdCategory)
                 .Select(x => x.Description)
