@@ -5,16 +5,18 @@ using WinglyShop.API.Abstractions.Auth;
 using WinglyShop.API.Attributes;
 using WinglyShop.Application.Abstractions.Data;
 using WinglyShop.Application.Abstractions.Dispatcher;
-using WinglyShop.Application.Carts;
+using WinglyShop.Application.Authentication.Profile.Response;
+using WinglyShop.Application.Authentication.Profile;
 using WinglyShop.Application.Users.Delete;
 using WinglyShop.Application.Users.Get;
 using WinglyShop.Application.Users.GetById;
 using WinglyShop.Application.Users.SetAccess;
 using WinglyShop.Application.Users.Update;
-using WinglyShop.Application.Wishlist;
 using WinglyShop.Domain.Common.Enums.Account;
 using WinglyShop.Domain.Entities.Users;
 using WinglyShop.Shared;
+using WinglyShop.Application.Users.DTOs;
+using WinglyShop.Application.Users.GetUserProfile;
 
 namespace WinglyShop.API.Controllers;
 
@@ -73,7 +75,33 @@ public class UsersController : ApiController
 		return Ok(Result.Success<User?>(userResponse));
 	}
 
-	[HttpPut("Edit")]
+    [Authorize]
+    [HttpGet("full-profile")]
+    public async Task<IActionResult> GetAuthenticatedProfile(CancellationToken cancellationToken)
+    {
+        // Getting the username
+        var username = _userAccessor.GetCurrentUsername();
+
+        // Validate if the username (token) is null
+        if (username is null)
+        {
+            return BadRequest("Você precisa estar logado.");
+        }
+
+        // Creating the query
+        var query = new GetUserFullProfileQuery(username);
+
+        // Sending the request to the handler
+        var userRequest = await _dispatcher.Query<GetUserFullProfileQuery, UserFullProfileDTO>(query, cancellationToken);
+
+        // Validate the request
+        if (userRequest is { IsFailure: true })
+            return BadRequest(userRequest.Error);
+
+        return Ok(userRequest.Value);
+    }
+
+    [HttpPut("Edit")]
 	public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequest request, CancellationToken cancellationToken)
 	{
 		return Ok();

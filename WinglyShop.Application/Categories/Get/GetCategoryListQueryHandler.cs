@@ -24,7 +24,9 @@ internal sealed class GetCategoryListQueryHandler : IQueryHandler<GetCategoryLis
 
         if (categoryList.IsNullOrEmpty())
         {
-            return Result.Failure<List<Category>>(new Error("Error", "Nenhuma Categoria foi encontrada."));
+            // If there is not categories, return an empty list of categories
+            categoryList = new List<Category>();
+            //return Result.Failure<List<Category>>(new Error("Error", "Nenhuma Categoria foi encontrada."));
         }
 
         return Result.Success(categoryList);
