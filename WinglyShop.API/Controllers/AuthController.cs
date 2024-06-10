@@ -99,7 +99,7 @@ public class AuthController : ApiController
 
 		// Validate the userResponse
 		if (userResponse is false)
-			return BadRequest("An error occoured.");
+			return BadRequest("Ocorreu um erro.");
 
 		//return Ok(Result.Success<bool>(true));
 		return Ok(true);
@@ -115,7 +115,7 @@ public class AuthController : ApiController
 		// Validate if the username (token) is null
 		if (username is null)
 		{
-			return BadRequest("You are not logged in.");
+			return BadRequest("Você precisa estar logado.");
 		}
 
 		// Creating the query

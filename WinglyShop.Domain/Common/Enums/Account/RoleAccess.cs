@@ -3,32 +3,32 @@
 namespace WinglyShop.Domain.Common.Enums.Account;
 
 public enum RoleAccess
-{
-	[Description("Customer")]
-	Customer = 0,
+{ 
+	[Description("Cliente")] //[Description("Customer")]
+    Customer = 0,
 
-	[Description("Premium Customer")]
+	[Description("Cliente Premium")] //[Description("Premium Customer")]
 	PremiumCustomer = 1,
 
-	[Description("Attendant")]
+	[Description("Atendente")] //[Description("Attendant")]
 	Attendant = 2,
 
-	[Description("Support")]
+	[Description("Suporte")] //[Description("Support")]
 	Support = 3,
 
-	[Description("Technical Support")]
+	[Description("Suporte Técnico")] //[Description("Technical Support")]
 	TechnicalSupport = 4,
 
-	[Description("Manager")]
+	[Description("Gerente")] //[Description("Manager")]
 	Manager = 5,
 
-	[Description("General Manager")]
+	[Description("Gerente Geral")] //[Description("General Manager")]
 	GeneralManager = 6,
 
-	[Description("Developer")]
+	[Description("Desenvolvedor")] //[Description("Developer")]
 	Developer = 7,
 
 	// Master Access
-	[Description("Admin")]
+	[Description("Administrador")] //[Description("Admin")]
 	Admin = 100
 }

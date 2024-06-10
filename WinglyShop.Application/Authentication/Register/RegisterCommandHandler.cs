@@ -54,7 +54,7 @@ internal sealed class RegisterCommandHandler : ICommandHandler<RegisterCommand, 
 
 			// Validate if user already exists
 			if (userExists is true)
-				return Result.Failure<bool>(new Error("Error", "User already exists."));
+				return Result.Failure<bool>(new Error("Error", "Esta conta já existe."));
 
 			// Insert data into database
 			await _context.Users.AddAsync(user);
@@ -62,7 +62,7 @@ internal sealed class RegisterCommandHandler : ICommandHandler<RegisterCommand, 
 		}
 		catch (Exception ex)
 		{
-			return Result.Failure<bool>(new Error("Error", "An error occoured."));
+			return Result.Failure<bool>(new Error("Error", "Ocorreu um erro."));
 		}
 
 		return Result.Success(true);

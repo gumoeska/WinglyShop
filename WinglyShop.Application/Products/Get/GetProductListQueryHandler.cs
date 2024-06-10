@@ -52,7 +52,9 @@ internal sealed class GetProductListQueryHandler : IQueryHandler<GetProductListQ
 
         if (productList.IsNullOrEmpty())
         {
-            return Result.Failure<List<Product>>(new Error("Error", "Ocorreu um erro."));
+            // If there is not products, return an empty list of products
+            productList = new List<Product>();
+            //return Result.Failure<List<Product>>(new Error("Error", "Ocorreu um erro."));
         }
 
         return Result.Success(productList);
