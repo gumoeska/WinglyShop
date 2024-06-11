@@ -1,18 +1,19 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using System.Transactions;
 using WinglyShop.API.Abstractions.Auth;
 using WinglyShop.API.Configurations;
 using WinglyShop.API.Middlewares.Authorization;
 using WinglyShop.API.Services.Auth;
+using WinglyShop.API.Services.Storage;
+using WinglyShop.API.Settings;
 using WinglyShop.Application;
 using WinglyShop.Application.Abstractions.Data;
 using WinglyShop.Application.Abstractions.Dispatcher;
+using WinglyShop.Application.Abstractions.Storage;
 using WinglyShop.Infrastructure;
 
 namespace WinglyShop.API
@@ -28,9 +29,10 @@ namespace WinglyShop.API
 				.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
 				.Build();
 
-			//builder.Services.Configure<SecretKey>(configuration.GetSection("SecretKey")); // Configuring the secret key
+            //builder.Services.Configure<SecretKey>(configuration.GetSection("SecretKey")); // Configuring the secret key
+            builder.Services.Configure<FileStorageSettings>(configuration.GetSection("FileStorageSettings")); // Configuring the FileStorageSettings
 
-			builder.Services.AddControllers();
+            builder.Services.AddControllers();
 			builder.Services.AddEndpointsApiExplorer();
 
 			builder.Configuration.AddConfiguration(configuration);
@@ -68,6 +70,7 @@ namespace WinglyShop.API
 			builder.Services.AddScoped<IDispatcher, Dispatcher>(); // Dispatcher
 			builder.Services.AddScoped<ITokenService, TokenService>(); // Token Service
 			builder.Services.AddScoped<IUserAccessor, UserAccessor>(); // User Data
+			builder.Services.AddScoped<IFileStorageService, FileStorageService>(); // File Storage Service
 
 			builder.Services.AddHandlersFromAssembly(typeof(AssemblyReference).Assembly); // Scan the Handlers
 

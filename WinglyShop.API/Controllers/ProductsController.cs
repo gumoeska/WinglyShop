@@ -6,18 +6,16 @@ using WinglyShop.Application.Abstractions.Dispatcher;
 using WinglyShop.Application.Products;
 using WinglyShop.API.Attributes;
 using WinglyShop.Domain.Common.Enums.Account;
-using WinglyShop.Shared;
-using WinglyShop.Application.Carts;
 using WinglyShop.Application.Wishlist;
 using Microsoft.AspNetCore.Authorization;
 using WinglyShop.Application.Products.Get;
 using WinglyShop.Domain.Entities.Products;
-using WinglyShop.Domain.Common.DTOs.Products;
-using WinglyShop.Domain.Entities.Categories;
 using WinglyShop.Application.Products.GetById;
 using WinglyShop.Application.Products.Update;
 using WinglyShop.Application.Products.Delete;
 using WinglyShop.Application.Products.UnlinkCategory;
+using WinglyShop.Domain.Common.DTOs.Products;
+using WinglyShop.Application.Products.GetProductImageById;
 
 namespace WinglyShop.API.Controllers;
 
@@ -56,15 +54,30 @@ public class ProductsController : ApiController
     {
         var query = new GetProductByIdQuery(id);
 
-        var userRequest = await _dispatcher.Query<GetProductByIdQuery, Product>(query, cancellationToken);
+        var userRequest = await _dispatcher.Query<GetProductByIdQuery, ProductFormDTO>(query, cancellationToken);
 
         if (userRequest is { IsFailure: true })
         {
             return BadRequest(userRequest.Error);
         }
 
-        //return Ok(Result.Success(userRequest.Value));
         return Ok(userRequest.Value);
+    }
+
+    [AllowAnonymous]
+    [HttpGet("image/{id}")]
+    public async Task<IActionResult> GetProductImageById(int id, CancellationToken cancellationToken)
+    {
+        var query = new GetProductImageByIdQuery(id);
+
+        var userRequest = await _dispatcher.Query<GetProductImageByIdQuery, FileResponse>(query, cancellationToken);
+
+        if (userRequest is { IsFailure: true })
+        {
+            return BadRequest(userRequest.Error);
+        }
+
+        return File(userRequest.Value.Stream, userRequest.Value.ContentType, userRequest.Value.FileName);
     }
 
     [AllowAnonymous]
@@ -85,19 +98,9 @@ public class ProductsController : ApiController
 
     [AuthAccessLevel(RoleAccess.GeneralManager)]
 	[HttpPost("Create")]
-	public async Task<IActionResult> CreateProduct(CreateProductRequest request, CancellationToken cancellationToken)
+	public async Task<IActionResult> CreateProduct([FromForm] CreateProductRequest request, CancellationToken cancellationToken)
 	{
-		var productDto = new ProductDTO
-		{
-            Code = request.Code,
-			Description = request.Description,
-			Price = request.Price,
-			HasStock = request.HasStock,
-			IsActive = request.IsActive,
-			IdCategory = request.IdCategory
-        };
-
-		var command = new CreateProductCommand(productDto);
+		var command = new CreateProductCommand(request);
 
 		var userRequest = await _dispatcher.Send<CreateProductCommand, bool>(command, cancellationToken);
 

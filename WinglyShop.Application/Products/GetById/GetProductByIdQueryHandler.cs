@@ -1,27 +1,31 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using WinglyShop.Application.Abstractions.Data;
 using WinglyShop.Application.Abstractions.Messaging;
-using WinglyShop.Domain.Entities.Products;
+using WinglyShop.Application.Abstractions.Storage;
+using WinglyShop.Domain.Common.DTOs.Products;
 using WinglyShop.Shared;
 
 namespace WinglyShop.Application.Products.GetById;
 
-internal sealed class GetProductByIdQueryHandler : IQueryHandler<GetProductByIdQuery, Product>
+internal sealed class GetProductByIdQueryHandler : IQueryHandler<GetProductByIdQuery, ProductFormDTO>
 {
     private readonly IDatabaseContext _context;
+    private readonly IFileStorageService _fileStorageService;
 
-    public GetProductByIdQueryHandler(IDatabaseContext context)
+    public GetProductByIdQueryHandler(
+        IDatabaseContext context, 
+        IFileStorageService fileStorageService)
     {
         _context = context;
+        _fileStorageService = fileStorageService;
     }
 
-    public async Task<Result<Product>> Handle(GetProductByIdQuery query, CancellationToken cancellationToken)
+    public async Task<Result<ProductFormDTO>> Handle(GetProductByIdQuery query, CancellationToken cancellationToken)
     {
         // Validation
         if (query is null)
         {
-            return Result.Failure<Product>(new Error("Error", "Ocorreu um erro ao buscar o produto selecionado."));
+            return Result.Failure<ProductFormDTO>(new Error("Error", "Ocorreu um erro ao buscar o produto selecionado."));
         }
 
         // Getting the product by id
@@ -37,7 +41,7 @@ internal sealed class GetProductByIdQueryHandler : IQueryHandler<GetProductByIdQ
         // Validate the Product/Category
         if (product is null)
         {
-            return Result.Failure<Product>(new Error("Error", "Ocorreu um erro ao buscar o produto selecionado."));
+            return Result.Failure<ProductFormDTO>(new Error("Error", "Ocorreu um erro ao buscar o produto selecionado."));
         }
 
         // Setting the description
@@ -46,6 +50,16 @@ internal sealed class GetProductByIdQueryHandler : IQueryHandler<GetProductByIdQ
             product.CategoryDescription = category.Description;
         }
 
-        return Result.Success(product);
+        var productFormDto = new ProductFormDTO(product);
+
+        // Setting the image
+        //if (!string.IsNullOrWhiteSpace(product.ImageUrl))
+        //{
+        //    var imagePath = _fileStorageService.GetFilePath(product.ImageUrl);
+
+        //    productFormDto.Image = await _fileStorageService.GetFile(imagePath);
+        //}
+
+        return Result.Success(productFormDto);
     }
 }

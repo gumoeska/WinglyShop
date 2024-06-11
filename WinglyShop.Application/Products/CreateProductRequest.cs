@@ -1,4 +1,8 @@
-﻿namespace WinglyShop.Application.Products;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Http;
+using WinglyShop.Domain.Entities.Categories;
+
+namespace WinglyShop.Application.Products;
 
 public sealed record CreateProductRequest(
     string Code,
@@ -6,4 +10,5 @@ public sealed record CreateProductRequest(
     decimal Price,
     bool HasStock,
     bool IsActive,
-    int IdCategory);
+    int IdCategory,
+    IFormFile? Image);

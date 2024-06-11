@@ -1,20 +1,20 @@
-﻿using WinglyShop.Domain.Entities.Products;
+﻿using Microsoft.AspNetCore.Http;
+using WinglyShop.Domain.Entities.Products;
 
 namespace WinglyShop.Domain.Common.DTOs.Products;
 
-public sealed class ProductDTO
+public sealed class ProductFormDTO
 {
-    public ProductDTO()
+    public ProductFormDTO()
     {
     }
 
-    public ProductDTO(Product product)
+    public ProductFormDTO(Product product)
     {
         Id = product.Id;
         Code = product.Code;
         Description = product.Description;
         Price = product.Price;
-        ImageUrl = product.ImageUrl;
         HasStock = product.HasStock;
         IsActive = product.IsActive;
         IdCategory = product.IdCategory;
@@ -24,8 +24,8 @@ public sealed class ProductDTO
     public string? Code { get; set; }
     public string? Description { get; set; }
     public decimal? Price { get; set; }
-    public string? ImageUrl { get; set; }
     public bool? HasStock { get; set; }
     public bool? IsActive { get; set; }
     public int? IdCategory { get; set; }
+    public IFormFile? Image { get; set; }
 }

@@ -19,6 +19,7 @@ public partial class Product
         Code = product.Code;
         Description = product.Description;
         Price = product.Price;
+        ImageUrl = product.ImageUrl;
         HasStock = product.HasStock;
         IsActive = product.IsActive;
         IdCategory = product.IdCategory;
@@ -31,6 +32,8 @@ public partial class Product
     public string? Description { get; set; }
 
     public decimal? Price { get; set; }
+
+    public string? ImageUrl { get; set; }
 
     public bool? HasStock { get; set; }
 
