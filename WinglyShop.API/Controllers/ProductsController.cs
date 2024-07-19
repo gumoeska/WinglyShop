@@ -98,7 +98,7 @@ public class ProductsController : ApiController
 
     [AuthAccessLevel(RoleAccess.GeneralManager)]
 	[HttpPost("Create")]
-	public async Task<IActionResult> CreateProduct([FromForm] CreateProductRequest request, CancellationToken cancellationToken)
+	public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequest request, CancellationToken cancellationToken)
 	{
 		var command = new CreateProductCommand(request);
 
