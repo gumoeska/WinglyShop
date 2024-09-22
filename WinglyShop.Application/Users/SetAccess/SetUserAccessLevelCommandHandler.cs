@@ -16,7 +16,7 @@ internal sealed class SetUserAccessLevelCommandHandler : ICommandHandler<SetUser
     }
 
     public async Task<Result<bool>> Handle(SetUserAccessLevelCommand command, CancellationToken cancellationToken)
-	{
+    {
         // Validation
         if (command is null)
         {
@@ -31,8 +31,8 @@ internal sealed class SetUserAccessLevelCommandHandler : ICommandHandler<SetUser
         // Validation
         if (user is null)
         {
-			return Result.Failure<bool>(new Error("Error", "This user doesn't exist."));
-		}
+            return Result.Failure<bool>(new Error("Error", "This user doesn't exist."));
+        }
 
         // Checking if there's a role with the selected accessLevel
         var role = await _context.Roles
@@ -41,7 +41,7 @@ internal sealed class SetUserAccessLevelCommandHandler : ICommandHandler<SetUser
 
         if (role is null)
         {
-			return Result.Failure<bool>(new Error("Error", "A role with this accessLevel doesn't exist."));
+            return Result.Failure<bool>(new Error("Error", "A role with this accessLevel doesn't exist."));
         }
 
         // Setting the user access level
@@ -50,13 +50,13 @@ internal sealed class SetUserAccessLevelCommandHandler : ICommandHandler<SetUser
             user.IdRole = role.Id;
 
             // Updating data
-			await _context.SaveChangesAsync();
-		}
-        catch(Exception ex)
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception ex)
         {
-			return Result.Failure<bool>(new Error("Error", "An error has occurred."));
-		}
+            return Result.Failure<bool>(new Error("Error", "An error has occurred."));
+        }
 
-		return Result.Success(true);
-	}
+        return Result.Success(true);
+    }
 }

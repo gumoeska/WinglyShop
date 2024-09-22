@@ -17,22 +17,14 @@ internal sealed class UpdateUserAccountCommandHandler : ICommandHandler<UpdateUs
 
     public async Task<Result<bool>> Handle(UpdateUserAccountCommand command, CancellationToken cancellationToken)
     {
-        // Getting the user
-        var user = await _context.Users
-            .Where(x => x.Login == command.Username)
-            .FirstOrDefaultAsync();
-
-        // Validation
-        if (user is null)
-        {
-            return Result.Failure<bool>(new Error("Error", "Usuário inexistente."));
-        }
-
         // Updating the user profile information
         try
         {
-            user.Password = command.Request.Password;
-            user.Email = command.Request.Email;
+            var updatedUser = await _context.Users
+                .Where(x => x.Login == command.Username)
+                .ExecuteUpdateAsync(x => x
+                    .SetProperty(user => user.Password, command.Request.Password)
+                    .SetProperty(user => user.Email, command.Request.Email));
 
             // Updating data
             await _context.SaveChangesAsync();
