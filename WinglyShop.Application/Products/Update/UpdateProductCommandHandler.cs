@@ -22,23 +22,19 @@ internal sealed class UpdateProductCommandHandler : ICommandHandler<UpdateProduc
             throw new ArgumentNullException(nameof(command));
         }
 
-        var product = new Product(command.Product);
+        var updatedProduct = new Product(command.Product);
 
         try
         {
             var productToEdit = await _context.Products
-                .Where(x => x.Id == product.Id)
-                .FirstOrDefaultAsync();
-
-            if (product is not null)
-            {
-                productToEdit.Description = product.Description;
-                productToEdit.Code = product.Code;
-                productToEdit.Price = product.Price;
-                productToEdit.IdCategory = product.IdCategory;
-                productToEdit.HasStock = product.HasStock;
-                productToEdit.IsActive = product.IsActive;
-            }
+                .Where(x => x.Id == updatedProduct.Id)
+                .ExecuteUpdateAsync(x => x
+                    .SetProperty(product => product.Description, updatedProduct.Description)
+                    .SetProperty(product => product.Code, updatedProduct.Code)
+                    .SetProperty(product => product.Price, updatedProduct.Price)
+                    .SetProperty(product => product.IdCategory, updatedProduct.IdCategory)
+                    .SetProperty(product => product.HasStock, updatedProduct.HasStock)
+                    .SetProperty(product => product.IsActive, updatedProduct.IsActive));
 
             await _context.SaveChangesAsync();
         }
